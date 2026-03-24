@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pan Campesino Pro - Estructura de Costos</title>
+    <title>Calculadora Naranja - Formato Regional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #fefaf6; -webkit-tap-highlight-color: transparent; }
@@ -16,61 +16,61 @@
 <body class="p-2 md:p-6 font-sans text-gray-800">
     <div class="max-w-md mx-auto">
         
-        <div class="bg-gradient-to-r from-gray-800 to-gray-700 rounded-t-xl p-4 text-white shadow-lg flex justify-between items-center">
+        <div class="bg-gradient-to-r from-orange-600 to-amber-500 rounded-t-xl p-4 text-white shadow-lg flex justify-between items-center">
             <div class="text-left">
-                <h1 class="text-2xl font-extrabold uppercase tracking-tight">Pan Campesino</h1>
-                <p class="text-gray-200 text-[10px] font-medium tracking-widest uppercase italic">Gestión de Fernando Araujo</p>
+                <h1 class="text-xl font-extrabold uppercase tracking-tight">Torta de Naranja</h1>
+                <p class="text-orange-100 text-[9px] font-medium tracking-widest uppercase italic">Gestión de Fernando Araujo</p>
             </div>
-            <button onclick="verificarAcceso()" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all border border-white/30">
+            <button onclick="verificarAcceso()" class="bg-white/20 p-2 rounded-full hover:bg-white/30 transition-all border border-white/40">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
             </button>
         </div>
 
-        <div class="bg-white rounded-b-xl card-shadow border border-gray-100 p-3">
+        <div class="bg-white rounded-b-xl card-shadow border border-orange-50 p-3">
             
             <div id="settings-panel" class="hidden bg-gray-50 p-4 rounded-xl border-2 border-dashed border-orange-200 mb-4">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Base de Costos por Gramo ($)</h3>
+                    <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Precios por Gramo ($)</h3>
                     <button onclick="cerrarAjustes()" class="text-red-500 text-[10px] font-bold uppercase">Cerrar</button>
                 </div>
                 <div id="prices-editor" class="grid grid-cols-1 gap-2 mb-4"></div>
-                <button onclick="savePrices()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg text-xs shadow-md">GUARDAR CAMBIOS EN COSTOS</button>
+                <button onclick="savePrices()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg text-xs shadow-md">GUARDAR CAMBIOS</button>
             </div>
 
-            <section class="bg-gray-50 p-3 rounded-lg border border-gray-100 mb-4">
-                <div>
-                    <label class="text-[9px] font-bold text-gray-500 uppercase tracking-wider block mb-1">Cantidad de Panes a Elaborar</label>
-                    <input type="number" id="cantidadPanes" placeholder="0" min="0" step="1" oninput="calcular()" class="w-full bg-white p-3 rounded-lg border border-gray-200 outline-none text-2xl font-black shadow-inner focus:border-gray-800 text-center">
-                </div>
+            <div class="flex p-1 bg-gray-100 rounded-lg mb-4 text-[11px]">
+                <button onclick="setShape('cuadrado')" id="btn-cuadrado" class="flex-1 py-2 font-bold rounded-md transition-all bg-white shadow text-orange-600 uppercase">Cuadrada</button>
+                <button onclick="setShape('redondo')" id="btn-redondo" class="flex-1 py-2 font-bold rounded-md transition-all text-gray-500 uppercase text-center uppercase">Redonda</button>
+            </div>
+
+            <section class="bg-orange-50/50 p-3 rounded-lg border border-orange-100 mb-4">
+                <div id="inputs-container" class="grid grid-cols-2 gap-2"></div>
             </section>
 
-            <div class="overflow-x-auto">
-                <table class="w-full table-auto">
-                    <thead>
-                        <tr class="text-gray-400 text-[10px] uppercase border-b border-gray-100 tracking-tighter">
-                            <th class="px-1 py-2 text-left">Ingrediente</th>
-                            <th class="px-1 py-2 text-right">Peso (g)</th>
-                            <th class="px-1 py-2 text-right">Costo ($)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-body" class="divide-y divide-gray-50 text-[13px]"></tbody>
-                    <tfoot class="border-t-2 border-gray-100">
-                        <tr class="bg-gray-50 text-gray-600">
-                            <td class="px-2 py-2 font-bold text-[10px] uppercase">Masa Total a Preparar</td>
-                            <td id="total-gramos" colspan="2" class="px-2 py-2 text-right font-black text-lg italic text-gray-800 no-wrap">0 g</td>
-                        </tr>
-                        <tr class="bg-gray-800 text-white shadow-inner">
-                            <td class="px-2 py-3 font-bold text-[11px] rounded-l-lg uppercase tracking-tight">Costo Total Insumos ($)</td>
-                            <td id="total-costo" colspan="2" class="px-2 py-3 text-right font-black text-xl rounded-r-lg">$ 0,00</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+            <table class="w-full table-auto">
+                <thead>
+                    <tr class="text-gray-400 text-[10px] uppercase border-b border-gray-100">
+                        <th class="px-1 py-2 text-left">Ingrediente</th>
+                        <th class="px-1 py-2 text-right">Peso</th>
+                        <th class="px-1 py-2 text-right">Costo</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-body" class="divide-y divide-gray-50 text-[13px]"></tbody>
+                <tfoot class="border-t-2 border-orange-100">
+                    <tr class="bg-gray-50 text-gray-600">
+                        <td class="px-2 py-2 font-bold text-[10px] uppercase">Masa Total</td>
+                        <td id="total-gramos" colspan="2" class="px-2 py-2 text-right font-black text-lg italic text-gray-800">0 g</td>
+                    </tr>
+                    <tr class="bg-orange-600 text-white">
+                        <td class="px-2 py-3 font-bold text-[11px] rounded-l-lg uppercase">Costo Producción</td>
+                        <td id="total-costo" colspan="2" class="px-2 py-3 text-right font-black text-xl rounded-r-lg">$0,00</td>
+                    </tr>
+                </tfoot>
+            </table>
 
-            <button onclick="copyToClipboard()" class="mt-4 w-full bg-gray-600 text-white font-bold py-3 rounded-lg text-xs shadow-md active:scale-95 transition-all flex items-center justify-center gap-2">
-                COPIAR RECETA PARA WHATSAPP
+            <button onclick="copyToClipboard()" class="mt-4 w-full bg-gray-800 text-white font-bold py-3 rounded-lg text-xs shadow-md active:scale-95 transition-all">
+                COPIAR RECETA
             </button>
         </div>
     </div>
@@ -78,28 +78,30 @@
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/90 text-white px-6 py-2 rounded-full text-[10px] font-bold opacity-0 transition-opacity pointer-events-none z-50"></div>
 
     <script>
-        const CLAVE_MAESTRA = "1506";
-        const LOCALE = 'es-VE';
-        const MASA_PAN_ESTANDAR = 402.5; 
+        // CONFIGURACIÓN
+        const CLAVE_MAESTRA = "2026";
+        const LOCALE = 'es-VE'; // Configuración para Venezuela (Punto para miles, coma para decimales)
 
+        let currentShape = 'cuadrado';
         const preciosBase = {
-            "Harina": 0.0012608, "Agua": 0, "Levadura": 0.012532, "Sal": 0.005217,
-            "Azúcar": 0.00038, "Margarina": 0.001576, "Vainilla": 0.002174
+            "Harina": 0.00126, "Sal": 0.00040, "Azúcar": 0.00160, "Aceite": 0.00458,
+            "Huevos": 0.004467, "Polvo de Hornear": 0.01620, "Jugo de Naranja": 0.00200, "Vainilla": 0.00200
         };
+        let preciosActuales = {};
 
         const recetaBase = [
-            { nombre: "Harina", porcentaje: 100.0 }, { nombre: "Agua", porcentaje: 54.5 },
-            { nombre: "Levadura", porcentaje: 1.7 }, { nombre: "Sal", porcentaje: 2.0 },
-            { nombre: "Azúcar", porcentaje: 8.0 }, { nombre: "Margarina", porcentaje: 8.0 },
-            { nombre: "Vainilla", porcentaje: 0.8 }
+            { nombre: "Harina", porcentaje: 100.0 }, { nombre: "Jugo de Naranja", porcentaje: 39.2 },
+            { nombre: "Azúcar", porcentaje: 95.7 }, { nombre: "Polvo de Hornear", porcentaje: 3.4 },
+            { nombre: "Aceite", porcentaje: 32.6 }, { nombre: "Sal", porcentaje: 2.3 },
+            { nombre: "Huevos", porcentaje: 71.9 }, { nombre: "Vainilla", porcentaje: 3.0 }
         ];
 
-        let preciosActuales = {};
+        // FORMATEADORES REGIONALES
         const fmtPeso = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0 });
         const fmtCosto = new Intl.NumberFormat(LOCALE, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         function verificarAcceso() {
-            const intento = prompt("Acceso Administrativo. Ingrese clave:");
+            const intento = prompt("Ingrese clave:");
             if (intento === CLAVE_MAESTRA) {
                 document.getElementById('settings-panel').classList.remove('hidden');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -109,7 +111,7 @@
         function cerrarAjustes() { document.getElementById('settings-panel').classList.add('hidden'); }
 
         function loadPrices() {
-            const stored = localStorage.getItem('precios_campesino');
+            const stored = localStorage.getItem('precios_naranja');
             preciosActuales = stored ? JSON.parse(stored) : {...preciosBase};
             renderPricesEditor();
         }
@@ -120,9 +122,9 @@
             for (const [nombre, precio] of Object.entries(preciosActuales)) {
                 container.innerHTML += `
                     <div class="flex items-center justify-between gap-2 bg-white p-2 rounded-lg border border-gray-100">
-                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">${nombre}</span>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase">${nombre}</span>
                         <input type="number" step="0.000001" value="${precio}" data-ing="${nombre}" 
-                            class="price-input w-24 text-right text-xs font-mono bg-orange-50 p-1 rounded border border-orange-100 outline-none font-bold text-gray-800">
+                            class="price-input w-24 text-right text-xs font-mono bg-orange-50 p-1 rounded border border-orange-100 outline-none font-bold text-orange-800">
                     </div>`;
             }
         }
@@ -131,39 +133,66 @@
             document.querySelectorAll('.price-input').forEach(input => {
                 preciosActuales[input.getAttribute('data-ing')] = parseFloat(input.value);
             });
-            localStorage.setItem('precios_campesino', JSON.stringify(preciosActuales));
-            showToast("BASE DE COSTOS ACTUALIZADA");
+            localStorage.setItem('precios_naranja', JSON.stringify(preciosActuales));
+            showToast("DATOS GUARDADOS");
             cerrarAjustes();
             calcular();
         }
 
-        function calcular() {
-            const inputCount = document.getElementById('cantidadPanes');
-            // Permitimos que esté vacío mientras el usuario escribe
-            const count = parseInt(inputCount.value) || 0; 
+        function setShape(shape) {
+            currentShape = shape;
+            document.getElementById('btn-cuadrado').className = shape === 'cuadrado' ? "flex-1 py-2 font-bold rounded-md bg-white shadow text-orange-600 uppercase" : "flex-1 py-2 font-bold rounded-md text-gray-500 uppercase text-center";
+            document.getElementById('btn-redondo').className = shape === 'redondo' ? "flex-1 py-2 font-bold rounded-md bg-white shadow text-orange-600 uppercase text-center" : "flex-1 py-2 font-bold rounded-md text-gray-500 text-center uppercase";
+            renderInputs();
+            calcular();
+        }
 
-            const pesoMasaTotalDeseada = count * MASA_PAN_ESTANDAR;
-            const pesoHarinaNecesaria = pesoMasaTotalDeseada / (recetaBase.reduce((a, b) => a + b.porcentaje, 0) / 100);
+        function renderInputs() {
+            const container = document.getElementById('inputs-container');
+            const style = "w-full bg-white p-2 rounded-lg border border-orange-200 outline-none text-sm font-bold shadow-sm focus:border-orange-500";
+            if (currentShape === 'cuadrado') {
+                container.innerHTML = `
+                    <div class="col-span-2"><label class="text-[9px] font-bold text-orange-700 uppercase">Altura (cm)</label><input type="number" id="altura" value="2.5" step="0.1" oninput="calcular()" class="${style}"></div>
+                    <div><label class="text-[9px] font-bold text-orange-700 uppercase">Profundidad</label><input type="number" id="profundidad" value="28" step="0.1" oninput="calcular()" class="${style}"></div>
+                    <div><label class="text-[9px] font-bold text-orange-700 uppercase">Largo</label><input type="number" id="largo" value="39" step="0.1" oninput="calcular()" class="${style}"></div>`;
+            } else {
+                container.innerHTML = `
+                    <div><label class="text-[9px] font-bold text-orange-700 uppercase">Diámetro (cm)</label><input type="number" id="diametro" value="14.5" step="0.1" oninput="calcular()" class="${style}"></div>
+                    <div><label class="text-[9px] font-bold text-orange-700 uppercase">Altura (cm)</label><input type="number" id="altura" value="9.5" step="0.1" oninput="calcular()" class="${style}"></div>`;
+            }
+        }
+
+        function calcular() {
+            let volumen = 0;
+            const h = parseFloat(document.getElementById('altura').value) || 0;
+            if (currentShape === 'cuadrado') {
+                volumen = h * (parseFloat(document.getElementById('profundidad').value) || 0) * (parseFloat(document.getElementById('largo').value) || 0);
+            } else {
+                volumen = Math.PI * Math.pow((parseFloat(document.getElementById('diametro').value) || 0) / 2, 2) * h;
+            }
+
+            const dens = currentShape === 'cuadrado' ? (1147 / (2.5*28*39)) : (659.1 / (Math.PI*Math.pow(14.5/2, 2)*9.5));
+            const pesoTotal = volumen * dens;
+            const pesoHarina = pesoTotal / (recetaBase.reduce((a, b) => a + b.porcentaje, 0) / 100);
 
             const tbody = document.getElementById('tabla-body');
             tbody.innerHTML = '';
-            let costoTotalInsumos = 0;
+            let costoAcumulado = 0;
 
             recetaBase.forEach(ing => {
-                const gramos = (pesoHarinaNecesaria * ing.porcentaje) / 100;
+                const gramos = (pesoHarina * ing.porcentaje) / 100;
                 const costo = gramos * (preciosActuales[ing.nombre] || 0);
-                costoTotalInsumos += costo;
-
+                costoAcumulado += costo;
                 tbody.innerHTML += `
                     <tr>
                         <td class="px-1 py-3 font-semibold text-gray-700 text-xs">${ing.nombre}</td>
-                        <td class="px-1 py-3 text-right font-bold text-gray-800 no-wrap text-sm">${fmtPeso.format(Math.round(gramos))} g</td>
-                        <td class="px-1 py-3 text-right text-gray-400 font-mono text-[11px] no-wrap border-l border-gray-50/50">$ ${fmtCosto.format(costo)}</td>
+                        <td class="px-1 py-3 text-right font-bold text-orange-600 no-wrap text-sm">${fmtPeso.format(Math.round(gramos))}g</td>
+                        <td class="px-1 py-3 text-right text-gray-400 font-mono text-[11px] no-wrap">$${fmtCosto.format(costo)}</td>
                     </tr>`;
             });
 
-            document.getElementById('total-gramos').innerText = fmtPeso.format(Math.round(pesoMasaTotalDeseada)) + ' g';
-            document.getElementById('total-costo').innerText = '$ ' + fmtCosto.format(costoTotalInsumos);
+            document.getElementById('total-gramos').innerText = fmtPeso.format(Math.round(pesoTotal)) + ' g';
+            document.getElementById('total-costo').innerText = '$' + fmtCosto.format(costoAcumulado);
         }
 
         function showToast(msg) {
@@ -173,21 +202,16 @@
         }
 
         async function copyToClipboard() {
-            const panes = document.getElementById('cantidadPanes').value || 0;
-            const masaTotal = document.getElementById('total-gramos').innerText;
-            const costoTotal = document.getElementById('total-costo').innerText;
-            
-            let text = `📋 PAN CAMPESINO - Producción\nUnidades: ${panes}\nCosto Insumos: ${costoTotal}\nMasa Total: ${masaTotal}\n---\n`;
+            let text = `📋 TORTA NARANJA - ${document.getElementById('total-costo').innerText}\n`;
+            text += `MASA TOTAL: ${document.getElementById('total-gramos').innerText}\n---\n`;
             document.querySelectorAll('#tabla-body tr').forEach(tr => {
-                text += `- ${tr.cells[0].innerText}: ${tr.cells[1].innerText}\n`;
+                text += `${tr.cells[0].innerText}: ${tr.cells[1].innerText}\n`;
             });
-            text += `\nGestión Fernando Araujo`;
-
             await navigator.clipboard.writeText(text);
             showToast("LISTA COPIADA");
         }
 
-        window.onload = () => { loadPrices(); document.getElementById('cantidadPanes').value = 1; calcular(); };
+        window.onload = () => { loadPrices(); renderInputs(); calcular(); };
     </script>
 </body>
 </html>
