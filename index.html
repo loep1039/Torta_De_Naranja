@@ -54,7 +54,7 @@
                     <tfoot>
                         <tr class="bg-orange-600 text-white">
                             <td colspan="2" class="px-4 py-4 font-bold text-sm rounded-bl-xl uppercase tracking-tighter">Peso Total Masa</td>
-                            <td id="total-gramos" class="px-4 py-4 text-right font-black text-2xl rounded-br-xl">0,0 g</td>
+                            <td id="total-gramos" class="px-4 py-4 text-right font-black text-2xl rounded-br-xl">0 g</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -155,17 +155,20 @@
 
             recetaBase.forEach(ing => {
                 const cantidadGramos = (pesoHarina * ing.porcentaje) / 100;
+                // Redondear a entero para facilitar la producción
+                const cantidadEntera = Math.round(cantidadGramos);
+                
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-orange-50/40 transition-all";
                 tr.innerHTML = `
                     <td class="px-2 py-3 text-gray-300 text-[10px] font-mono">${ing.id}</td>
                     <td class="px-2 py-3 font-bold text-gray-800 text-[15px]">${ing.nombre}</td>
-                    <td class="px-2 py-3 text-right font-mono font-black text-orange-600 text-lg" id="val-${ing.id}">${cantidadGramos.toFixed(1).replace('.', ',')}</td>
+                    <td class="px-2 py-3 text-right font-mono font-black text-orange-600 text-lg" id="val-${ing.id}">${cantidadEntera}</td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            document.getElementById('total-gramos').innerText = pesoTotal.toFixed(1).replace('.', ',') + ' g';
+            document.getElementById('total-gramos').innerText = Math.round(pesoTotal) + ' g';
         }
 
         function copyToClipboard() {
