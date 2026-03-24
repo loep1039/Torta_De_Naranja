@@ -19,7 +19,7 @@
         <!-- Encabezado -->
         <div class="bg-gradient-to-r from-orange-600 to-amber-500 rounded-t-2xl p-5 text-white shadow-lg text-center">
             <h1 class="text-2xl font-extrabold uppercase tracking-tight">Torta de Naranja</h1>
-            <p class="text-orange-100 text-[10px] font-medium tracking-widest uppercase">Calculadora de Pesos</p>
+            <p class="text-orange-100 text-[10px] font-medium tracking-widest uppercase">Fernando Araujo - Calculadora de Pesos</p>
         </div>
 
         <div class="bg-white rounded-b-2xl card-shadow border border-orange-50 p-4 md:p-6">
@@ -179,7 +179,8 @@
                 text += `${ing.nombre}: ${val}g\n`;
             });
             text += `---------------------------\n`;
-            text += `TOTAL: ${document.getElementById('total-gramos').innerText}`;
+            text += `TOTAL: ${document.getElementById('total-gramos').innerText}\n`;
+            text += `Elaborado por Fernando Araujo`;
 
             const el = document.createElement('textarea');
             el.value = text;
