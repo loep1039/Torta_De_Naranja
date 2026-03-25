@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Torta de Naranja - Fernando Araujo</title>
+    <title>Calculadora Torta de Naranja</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #f8fafc; }
@@ -39,27 +39,51 @@
             </div>
             <p class="text-xs text-orange-600 text-center italic">Precios actualizados desde Google Sheets</p>
         </div>
+
+        <div class="mt-6">
+            <h3 class="text-sm font-bold text-gray-400 uppercase mb-3 tracking-widest text-center">Ingredientes Necesarios</h3>
+            <div class="overflow-hidden rounded-xl border border-gray-100">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
+                        <tr>
+                            <th class="px-4 py-2">Ingrediente</th>
+                            <th class="px-4 py-2 text-right">Cantidad (gr/ml)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaIngredientes" class="divide-y divide-gray-50">
+                        </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
-        // URL de tu Apps Script
+        // 1. TU URL DE GOOGLE APPS SCRIPT
         const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvf06emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9KxCP3oBg/exec";
         
         let precios = {};
 
-        // Función para traer precios de la nube
+        // 2. FUNCIÓN PARA CARGAR LOS PRECIOS
         async function cargarPrecios() {
             try {
                 const res = await fetch(URL_NUBE);
                 precios = await res.json();
-                console.log("Sincronización exitosa con Precios Panaderia");
+                console.log("Precios sincronizados con éxito");
             } catch (e) {
                 console.warn("Fallo conexión, usando precios de respaldo");
-                precios = { "Harina": 0.0012, "Azúcar": 0.0016, "Huevos": 0.015, "Aceite": 0.003 };
+                // Precios de emergencia
+                precios = { 
+                    "Harina": 0.001, 
+                    "Azúcar": 0.001, 
+                    "Margarina": 0.002, 
+                    "Vainilla": 0.002,
+                    "Huevos": 0.010 
+                };
             }
-            calcular();
+            calcular(); // Se calcula la primera vez al cargar la página
         }
 
+        // 3. FUNCIÓN PARA CALCULAR VOLUMEN, COSTO E INGREDIENTES
         function calcular() {
             const l = parseFloat(document.getElementById('largo').value) || 0;
             const a = parseFloat(document.getElementById('ancho').value) || 0;
@@ -67,14 +91,43 @@
             
             const volumen = l * a * h;
 
-            // Lógica de costos basada en volumen y precios de la nube
-            // Nota: Los nombres deben ser EXACTOS a tu Excel ("Harina", "Azúcar", etc.)
-            const costo = (volumen * 0.45) * (precios["Harina"] || 0) + 
-                          (volumen * 0.30) * (precios["Azúcar"] || 0);
+            // RECETA BASE: Cantidad (en gramos o ml) por cada 1 cm cúbico
+            // NOTA: Ajusta estos factores según tu receta real.
+            const receta = [
+                { nombre: "Harina", factor: 0.25 },
+                { nombre: "Azúcar", factor: 0.20 },
+                { nombre: "Margarina", factor: 0.15 },
+                { nombre: "Huevos", factor: 0.10 },
+                { nombre: "Vainilla", factor: 0.02 }
+            ];
 
-            document.getElementById('costoTotal').innerText = `$${costo.toFixed(2)}`;
+            let costoTotal = 0;
+            let htmlTabla = "";
+
+            receta.forEach(ing => {
+                const cantidad = volumen * ing.factor;
+                // El nombre debe coincidir EXACTAMENTE con tu Excel
+                const precioUnitario = precios[ing.nombre] || 0; 
+                
+                costoTotal += (cantidad * precioUnitario);
+
+                const unidad = (ing.nombre === 'Vainilla' || ing.nombre === 'Aceite') ? 'ml' : 'gr';
+                
+                // Construimos las filas de la tabla
+                htmlTabla += `
+                    <tr class="hover:bg-orange-50 transition-colors">
+                        <td class="px-4 py-2 text-gray-700 font-medium">${ing.nombre}</td>
+                        <td class="px-4 py-2 text-right text-orange-600 font-bold">${cantidad.toFixed(1)} ${unidad}</td>
+                    </tr>
+                `;
+            });
+
+            // Actualizamos el costo y la tabla en el HTML
+            document.getElementById('costoTotal').innerText = `$${costoTotal.toFixed(2)}`;
+            document.getElementById('listaIngredientes').innerHTML = htmlTabla;
         }
 
+        // 4. INICIAMOS AL CARGAR LA PÁGINA
         window.onload = cargarPrecios;
     </script>
 </body>
