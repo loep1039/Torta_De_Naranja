@@ -8,13 +8,14 @@
     <style>
         body { background-color: #f8fafc; }
         .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .transition-all { transition: all 0.3s ease; }
     </style>
 </head>
 <body class="p-4 md:p-8 font-sans text-gray-800">
 
     <div class="max-w-2xl mx-auto bg-white rounded-2xl p-6 card-shadow border border-orange-100">
         <h2 class="text-2xl font-bold text-center text-orange-600 mb-6 uppercase tracking-wider">
-            Torta de Naranja
+            Torta de Naranja (Pesaje Exacto)
         </h2>
 
         <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
@@ -28,40 +29,39 @@
 
         <div class="grid grid-cols-3 gap-4 mb-6">
             <div id="colLargo">
-                <label id="labelLargo" class="block text-xs font-bold text-gray-500 uppercase">Largo (cm)</label>
-                <input type="number" id="largo" value="20" oninput="calcular()" class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-orange-300 outline-none">
+                <label id="labelLargo" class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Largo (cm)</label>
+                <input type="number" id="largo" value="20" oninput="calcular()" class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-orange-300 outline-none font-semibold">
             </div>
             <div id="colAncho">
-                <label class="block text-xs font-bold text-gray-500 uppercase">Ancho (cm)</label>
-                <input type="number" id="ancho" value="20" oninput="calcular()" class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-orange-300 outline-none">
+                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Ancho (cm)</label>
+                <input type="number" id="ancho" value="20" oninput="calcular()" class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-orange-300 outline-none font-semibold">
             </div>
             <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase">Alto (cm)</label>
-                <input type="number" id="alto" value="8" oninput="calcular()" class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-orange-300 outline-none">
+                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Alto (cm)</label>
+                <input type="number" id="alto" value="8" oninput="calcular()" class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-orange-300 outline-none font-semibold">
             </div>
         </div>
 
         <div class="bg-orange-50 rounded-xl p-4 border border-orange-200 mb-6 text-center">
             <div class="flex justify-between items-center border-b border-orange-200 pb-2 mb-2">
-                <span class="font-semibold text-orange-800 uppercase text-sm">Costo Total Producción:</span>
+                <span class="font-semibold text-orange-800 uppercase text-xs">Costo Total Producción:</span>
                 <span id="costoTotal" class="text-3xl font-bold text-orange-700">$0.00</span>
             </div>
-            <p id="estadoConexion" class="text-[9px] text-gray-400 uppercase tracking-widest">Cargando precios de la nube...</p>
+            <p id="estadoConexion" class="text-[9px] text-gray-400 uppercase tracking-widest italic">Sincronizando con Google Sheets...</p>
         </div>
 
         <div>
-            <h3 class="text-xs font-bold text-gray-400 uppercase mb-3 tracking-widest text-center">Desglose de Insumos</h3>
+            <h3 class="text-xs font-bold text-gray-400 uppercase mb-3 tracking-widest text-center">Desglose de Insumos (Todo en Gramos)</h3>
             <div class="overflow-hidden rounded-xl border border-gray-100">
                 <table class="w-full text-left text-sm">
                     <thead class="bg-gray-50 text-gray-400 uppercase text-[10px]">
                         <tr>
                             <th class="px-4 py-3">Ingrediente</th>
-                            <th class="px-2 py-3 text-center">Cantidad</th>
+                            <th class="px-2 py-3 text-center">Peso</th>
                             <th class="px-4 py-3 text-right">Sub-Precio</th>
                         </tr>
                     </thead>
-                    <tbody id="listaIngredientes" class="divide-y divide-gray-50">
-                    </tbody>
+                    <tbody id="listaIngredientes" class="divide-y divide-gray-50"></tbody>
                 </table>
             </div>
         </div>
@@ -77,9 +77,16 @@
             document.getElementById('colAncho').style.display = (tipo === 'redondo') ? 'none' : 'block';
             document.getElementById('labelLargo').innerText = (tipo === 'redondo') ? "Diámetro (cm)" : "Largo (cm)";
             
-            document.getElementById('btnCuadrado').className = (tipo === 'cuadrado') ? "flex-1 py-2 rounded-lg font-bold text-xs uppercase bg-white text-orange-600 shadow-sm" : "flex-1 py-2 rounded-lg font-bold text-xs uppercase text-gray-500";
-            document.getElementById('btnRedondo').className = (tipo === 'redondo') ? "flex-1 py-2 rounded-lg font-bold text-xs uppercase bg-white text-orange-600 shadow-sm" : "flex-1 py-2 rounded-lg font-bold text-xs uppercase text-gray-500";
+            const btnC = document.getElementById('btnCuadrado');
+            const btnR = document.getElementById('btnRedondo');
             
+            if(tipo === 'cuadrado') {
+                btnC.className = "flex-1 py-2 rounded-lg font-bold text-xs uppercase bg-white text-orange-600 shadow-sm";
+                btnR.className = "flex-1 py-2 rounded-lg font-bold text-xs uppercase text-gray-500";
+            } else {
+                btnR.className = "flex-1 py-2 rounded-lg font-bold text-xs uppercase bg-white text-orange-600 shadow-sm";
+                btnC.className = "flex-1 py-2 rounded-lg font-bold text-xs uppercase text-gray-500";
+            }
             calcular();
         }
 
@@ -87,19 +94,18 @@
             try {
                 const res = await fetch(URL_NUBE);
                 const data = await res.json();
-                
-                // Normalizamos las llaves del Excel para que no importen mayúsculas ni espacios
                 precios = Object.keys(data).reduce((acc, key) => {
-                    acc[key.toLowerCase().trim()] = parseFloat(String(data[key]).replace(',', '.'));
+                    acc[key.toLowerCase().trim()] = data[key];
                     return acc;
                 }, {});
                 
-                document.getElementById('estadoConexion').innerText = "✓ Precios Sincronizados con Google Sheets";
-                document.getElementById('estadoConexion').classList.replace('text-gray-400', 'text-green-600');
+                const statusMsg = document.getElementById('estadoConexion');
+                statusMsg.innerText = "✓ Precios Actualizados";
+                statusMsg.style.color = "#16a34a";
             } catch (e) {
-                document.getElementById('estadoConexion').innerText = "⚠ Error al conectar con los precios";
-                document.getElementById('estadoConexion').classList.replace('text-gray-400', 'text-red-500');
-                console.error("Fallo carga de precios", e);
+                const statusMsg = document.getElementById('estadoConexion');
+                statusMsg.innerText = "⚠ Usando datos locales";
+                statusMsg.style.color = "#dc2626";
             }
             calcular();
         }
@@ -111,7 +117,7 @@
             
             let volumen = (modoMolde === 'cuadrado') ? (l * a * h) : (Math.PI * Math.pow(l / 2, 2) * h);
 
-            // Nombres exactos para coincidir con tu Columna A de Excel
+            // Factores ajustados para pesaje directo (gr)
             const receta = [
                 { nombre: "Harina", factor: 0.20 },
                 { nombre: "Jugo de Naranja", factor: 0.15 },
@@ -127,17 +133,17 @@
             let htmlFilas = "";
 
             receta.forEach(ing => {
-                const cantidad = volumen * ing.factor;
-                // Búsqueda insensible a mayúsculas
-                const precioUnitario = precios[ing.nombre.toLowerCase().trim()] || 0; 
-                const subTotal = cantidad * precioUnitario;
-                
+                const cantidadGramos = volumen * ing.factor;
+                const precioGramo = precios[ing.nombre.toLowerCase().trim()] || 0; 
+                const subTotal = cantidadGramos * precioGramo;
                 costoAcumulado += subTotal;
 
                 htmlFilas += `
                     <tr class="hover:bg-orange-50/50 transition-colors">
                         <td class="px-4 py-3 font-medium text-gray-700">${ing.nombre}</td>
-                        <td class="px-2 py-3 text-center text-gray-500">${cantidad.toFixed(1)} ${['Vainilla', 'Aceite', 'Jugo de Naranja'].includes(ing.nombre) ? 'ml' : 'gr'}</td>
+                        <td class="px-2 py-3 text-center text-gray-500 font-mono">
+                            ${cantidadGramos.toFixed(1)} gr
+                        </td>
                         <td class="px-4 py-3 text-right text-orange-600 font-bold">$${subTotal.toFixed(3)}</td>
                     </tr>
                 `;
