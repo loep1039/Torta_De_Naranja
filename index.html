@@ -3,82 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Panadería Pro</title>
+    <title>Calculadora Torta de Naranja Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #f1f5f9; }
-        .card-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); }
+        body { background-color: #f8fafc; }
+        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
-<body class="p-4 md:p-6 font-sans text-gray-800">
+<body class="p-4 md:p-8 font-sans">
 
-    <div class="max-w-xl mx-auto bg-white rounded-3xl overflow-hidden card-shadow border border-gray-100">
-        <div class="bg-orange-600 p-5 text-center">
-            <h2 class="text-lg font-black text-white uppercase tracking-[0.2em]">
+    <div class="max-w-lg mx-auto bg-white rounded-[2rem] overflow-hidden card-shadow border border-slate-100">
+        <div class="bg-gradient-to-r from-orange-500 to-amber-500 p-6 text-center">
+            <h2 class="text-xl font-black text-white uppercase tracking-widest">
                 Torta de Naranja
             </h2>
-            <p class="text-[10px] text-orange-100 font-bold uppercase mt-1">Calculadora de Producción</p>
+            <div class="h-1 w-12 bg-white/30 mx-auto mt-2 rounded-full"></div>
         </div>
 
         <div class="p-6">
-            <div class="flex bg-gray-100 p-1 rounded-xl mb-6 text-[11px] font-bold uppercase">
-                <button onclick="cambiarMolde('cuadrado')" id="btnCuadrado" class="flex-1 py-2 rounded-lg transition-all bg-white text-orange-600 shadow-sm">
+            <div class="flex bg-slate-100 p-1 rounded-2xl mb-8">
+                <button onclick="cambiarMolde('cuadrado')" id="btnCuadrado" class="flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase transition-all bg-white text-orange-600 shadow-sm">
                     Cuadrado / Rectangular
                 </button>
-                <button onclick="cambiarMolde('redondo')" id="btnRedondo" class="flex-1 py-2 rounded-lg transition-all text-gray-400">
+                <button onclick="cambiarMolde('redondo')" id="btnRedondo" class="flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase transition-all text-slate-400">
                     Redondo / Circular
                 </button>
             </div>
 
-            <div class="grid grid-cols-3 gap-3 mb-6">
-                <div id="colLargo">
-                    <label id="labelLargo" class="block text-[9px] font-black text-gray-400 uppercase mb-1 ml-1">Largo (cm)</label>
-                    <input type="number" id="largo" value="20" oninput="calcular()" class="w-full p-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center">
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div>
+                    <label id="labelLargo" class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1 text-center">Largo (cm)</label>
+                    <input type="number" id="largo" value="39" oninput="calcular()" class="w-full p-3 bg-slate-50 border-2 border-transparent focus:border-orange-400 rounded-2xl outline-none font-bold text-center text-slate-700 transition-all">
                 </div>
                 <div id="colAncho">
-                    <label class="block text-[9px] font-black text-gray-400 uppercase mb-1 ml-1">Ancho (cm)</label>
-                    <input type="number" id="ancho" value="20" oninput="calcular()" class="w-full p-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1 text-center">Ancho (cm)</label>
+                    <input type="number" id="ancho" value="28" oninput="calcular()" class="w-full p-3 bg-slate-50 border-2 border-transparent focus:border-orange-400 rounded-2xl outline-none font-bold text-center text-slate-700 transition-all">
                 </div>
                 <div>
-                    <label class="block text-[9px] font-black text-gray-400 uppercase mb-1 ml-1">Alto (cm)</label>
-                    <input type="number" id="alto" value="8" oninput="calcular()" class="w-full p-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1 text-center">Alto (cm)</label>
+                    <input type="number" id="alto" value="2.5" oninput="calcular()" class="w-full p-3 bg-slate-50 border-2 border-transparent focus:border-orange-400 rounded-2xl outline-none font-bold text-center text-slate-700 transition-all">
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <div class="bg-orange-50 border border-orange-100 rounded-2xl p-3 text-center">
-                    <p class="text-[9px] uppercase font-black text-orange-400 mb-0.5">Costo Total</p>
-                    <p id="costoTotal" class="text-xl font-black text-orange-700">$0,00</p>
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-orange-50/50 border border-orange-100 rounded-3xl p-4 text-center">
+                    <p class="text-[10px] uppercase font-bold text-orange-400 mb-1">Costo Producción</p>
+                    <p id="costoTotal" class="text-2xl font-black text-orange-600">$ 0,00</p>
                 </div>
-                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-3 text-center">
-                    <p class="text-[9px] uppercase font-black text-slate-400 mb-0.5">Peso de Masa</p>
-                    <p id="pesoTotalMasa" class="text-xl font-black text-slate-700">0 gr</p>
+                <div class="bg-slate-50 border border-slate-100 rounded-3xl p-4 text-center">
+                    <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Masa Total</p>
+                    <p id="pesoTotalMasa" class="text-2xl font-black text-slate-700">0 gr</p>
                 </div>
             </div>
 
-            <div class="mb-4 text-center">
-                <span id="estadoConexion" class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider bg-gray-100 text-gray-400">
-                    Sincronizando...
+            <div class="flex justify-center mb-6">
+                <span id="estadoConexion" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-slate-100 text-slate-400 transition-all">
+                    Sincronizando precios...
                 </span>
             </div>
 
-            <div class="overflow-hidden rounded-xl border border-gray-100">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-gray-50 text-gray-400 uppercase text-[9px] font-black">
+            <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50">
                         <tr>
-                            <th class="pl-4 py-3 w-10">#</th>
-                            <th class="py-3">Ingrediente</th>
-                            <th class="pr-4 py-3 text-right">Cantidad / Sub-Precio</th>
+                            <th class="pl-4 py-4 text-[10px] font-bold text-slate-400 uppercase w-12">#</th>
+                            <th class="py-4 text-[10px] font-bold text-slate-400 uppercase">Ingrediente</th>
+                            <th class="pr-4 py-4 text-[10px] font-bold text-slate-400 uppercase text-right">Cantidad / Costo</th>
                         </tr>
                     </thead>
-                    <tbody id="listaIngredientes" class="divide-y divide-gray-50"></tbody>
+                    <tbody id="listaIngredientes" class="divide-y divide-slate-50">
+                        </tbody>
                 </table>
             </div>
         </div>
     </div>
 
     <script>
-        const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvfo6emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9QkXcP3oBg/exec";
+        const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvfo6emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9QkXcP3oBg/exec"; // Pegar la URL /exec
         let precios = {};
         let modoMolde = 'cuadrado';
 
@@ -91,20 +92,18 @@
 
         function cambiarMolde(tipo) {
             modoMolde = tipo;
-            document.getElementById('colAncho').style.visibility = (tipo === 'redondo') ? 'hidden' : 'visible';
+            document.getElementById('colAncho').style.display = (tipo === 'redondo') ? 'none' : 'block';
             document.getElementById('labelLargo').innerText = (tipo === 'redondo') ? "Diámetro (cm)" : "Largo (cm)";
             
             const btnC = document.getElementById('btnCuadrado');
             const btnR = document.getElementById('btnRedondo');
             
             if(tipo === 'cuadrado') {
-                btnC.classList.add('bg-white', 'text-orange-600', 'shadow-sm');
-                btnR.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
-                btnR.classList.add('text-gray-400');
+                btnC.className = "flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase bg-white text-orange-600 shadow-sm";
+                btnR.className = "flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase text-slate-400";
             } else {
-                btnR.classList.add('bg-white', 'text-orange-600', 'shadow-sm');
-                btnC.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
-                btnC.classList.add('text-gray-400');
+                btnR.className = "flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase bg-white text-orange-600 shadow-sm";
+                btnC.className = "flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase text-slate-400";
             }
             calcular();
         }
@@ -120,12 +119,10 @@
                 }, {});
                 
                 const status = document.getElementById('estadoConexion');
-                status.innerText = "✓ Precios Actualizados";
-                status.className = "px-3 py-1 rounded-full text-[9px] font-bold uppercase bg-green-50 text-green-500";
+                status.innerText = "✓ Precios Sincronizados";
+                status.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-green-50 text-green-500";
             } catch (e) {
-                const status = document.getElementById('estadoConexion');
-                status.innerText = "⚠ Usando Datos Locales";
-                status.className = "px-3 py-1 rounded-full text-[9px] font-bold uppercase bg-red-50 text-red-400";
+                document.getElementById('estadoConexion').innerText = "⚠ Usando Precios Locales";
             }
             calcular();
         }
@@ -135,38 +132,51 @@
             const a = parseFloat(document.getElementById('ancho').value) || 0;
             const h = parseFloat(document.getElementById('alto').value) || 0;
             
-            let volumen = (modoMolde === 'cuadrado') ? (l * a * h) : (Math.PI * Math.pow(l / 2, 2) * h);
+            // 1. Calcular Volumen
+            const volumen = (modoMolde === 'cuadrado') ? (l * a * h) : (Math.PI * Math.pow(l/2, 2) * h);
 
+            // 2. Factor de Densidad de tu tabla (Masa / Volumen) -> aprox 0.4201
+            const masaObjetivo = volumen * 0.4201;
+
+            // 3. Porcentajes exactos de tu columna "C" en la tabla
             const receta = [
-                { nombre: "Harina", factor: 0.20, tipo: "kilo" },
-                { nombre: "Jugo de Naranja", factor: 0.15, tipo: "kilo" },
-                { nombre: "Azúcar", factor: 0.16, tipo: "kilo" },
-                { nombre: "Polvo de Hornear", factor: 0.01, tipo: "kilo" },
-                { nombre: "Aceite", factor: 0.10, tipo: "kilo" },
-                { nombre: "Sal", factor: 0.002, tipo: "kilo" },
-                { nombre: "Huevos", factor: 0.08, tipo: "carton" },
-                { nombre: "Vainilla", factor: 0.016, tipo: "kilo" }
+                { nombre: "Harina", pct: 100 },
+                { nombre: "Jugo de Naranja", pct: 39.2 },
+                { nombre: "Azúcar", pct: 95.7 },
+                { nombre: "Polvo de Hornear", pct: 3.4 },
+                { nombre: "Aceite", pct: 32.6 },
+                { nombre: "Sal", pct: 2.3 },
+                { nombre: "Huevos", pct: 71.9 },
+                { nombre: "Vainilla", pct: 3 }
             ];
 
+            // Suma total de porcentajes: 348.1%
+            const sumaPorcentajes = receta.reduce((acc, ing) => acc + ing.pct, 0);
+            
+            // Calcular la base (100% de Harina)
+            const baseHarina = masaObjetivo / (sumaPorcentajes / 100);
+
             let costoTotal = 0;
-            let pesoTotalMasa = 0;
             let html = "";
 
             receta.forEach((ing, index) => {
-                const gr = volumen * ing.factor;
-                pesoTotalMasa += gr;
+                const cantidadGramos = baseHarina * (ing.pct / 100);
                 
+                // Buscar precio en la tabla de Google Sheets
                 const precioBase = precios[ing.nombre.toLowerCase().trim()] || 0;
-                const precioGramo = (ing.tipo === "carton") ? (precioBase / 1500) : (precioBase / 1000);
-                const subtotal = gr * precioGramo;
+                
+                // Si es huevos, asumimos precio por cartón (1500g aprox), sino por kilo
+                const divisor = (ing.nombre.toLowerCase().includes("huevo")) ? 1500 : 1000;
+                const subtotal = cantidadGramos * (precioBase / divisor);
+                
                 costoTotal += subtotal;
 
                 html += `
                     <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="pl-4 py-3 text-[10px] font-black text-gray-300 italic">${index + 1}</td>
-                        <td class="py-3 text-[12px] font-bold text-gray-700">${ing.nombre}</td>
-                        <td class="pr-4 py-3 text-right">
-                            <div class="text-[12px] font-black text-gray-900">${formatLatam(gr, 1)} gr</div>
+                        <td class="pl-4 py-4 text-[10px] font-black text-slate-300 italic">${index + 1}</td>
+                        <td class="py-4 font-bold text-slate-700 text-[13px]">${ing.nombre} <span class="text-[9px] text-slate-300 ml-1">(${ing.pct}%)</span></td>
+                        <td class="pr-4 py-4 text-right">
+                            <div class="text-[13px] font-black text-slate-900">${formatLatam(cantidadGramos, 1)} gr</div>
                             <div class="text-[10px] font-bold text-orange-400">$ ${formatLatam(subtotal, 3)}</div>
                         </td>
                     </tr>
@@ -174,7 +184,7 @@
             });
 
             document.getElementById('costoTotal').innerText = `$ ${formatLatam(costoTotal, 2)}`;
-            document.getElementById('pesoTotalMasa').innerText = `${formatLatam(pesoTotalMasa, 0)} gr`;
+            document.getElementById('pesoTotalMasa').innerText = `${formatLatam(masaObjetivo, 0)} gr`;
             document.getElementById('listaIngredientes').innerHTML = html;
         }
 
