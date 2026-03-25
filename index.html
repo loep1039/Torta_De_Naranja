@@ -95,8 +95,9 @@
                 const res = await fetch(URL_NUBE);
                 const data = await res.json();
                 precios = Object.keys(data).reduce((acc, key) => {
-                    // Limpieza profunda de los nombres para asegurar el match
-                    acc[key.toLowerCase().trim()] = parseFloat(String(data[key]).replace(',', '.'));
+                    // Limpieza profunda de los precios (quita $, comas por puntos, etc)
+                    let precioLimpio = String(data[key]).replace('$', '').replace(/\s/g, '').replace(',', '.');
+                    acc[key.toLowerCase().trim()] = parseFloat(precioLimpio) || 0;
                     return acc;
                 }, {});
                 
@@ -118,15 +119,16 @@
             
             let volumen = (modoMolde === 'cuadrado') ? (l * a * h) : (Math.PI * Math.pow(l / 2, 2) * h);
 
+            // Definimos la receta con la unidad de compra para la carpintería interna
             const receta = [
-                { nombre: "Harina", factor: 0.20 },
-                { nombre: "Jugo de Naranja", factor: 0.15 },
-                { nombre: "Azúcar", factor: 0.16 },
-                { nombre: "Polvo de Hornear", factor: 0.01 },
-                { nombre: "Aceite", factor: 0.10 },
-                { nombre: "Sal", factor: 0.002 },
-                { nombre: "Huevos", factor: 0.08 },
-                { nombre: "Vainilla", factor: 0.016 }
+                { nombre: "Harina", factor: 0.20, unidadCompra: "kilo" },
+                { nombre: "Jugo de Naranja", factor: 0.15, unidadCompra: "kilo" },
+                { nombre: "Azúcar", factor: 0.16, unidadCompra: "kilo" },
+                { nombre: "Polvo de Hornear", factor: 0.01, unidadCompra: "kilo" },
+                { nombre: "Aceite", factor: 0.10, unidadCompra: "kilo" },
+                { nombre: "Sal", factor: 0.002, unidadCompra: "kilo" },
+                { nombre: "Huevos", factor: 0.08, unidadCompra: "carton" },
+                { nombre: "Vainilla", factor: 0.016, unidadCompra: "kilo" }
             ];
 
             let costoAcumulado = 0;
@@ -134,8 +136,21 @@
 
             receta.forEach(ing => {
                 const cantidadGramos = volumen * ing.factor;
-                const precioGramo = precios[ing.nombre.toLowerCase().trim()] || 0; 
-                const subTotal = cantidadGramos * precioGramo;
+                let precioPorGramo = 0;
+                
+                // Obtenemos el precio que pusiste en el Excel (por kilo o por cartón)
+                const precioBase = precios[ing.nombre.toLowerCase().trim()] || 0;
+
+                // Lógica de carpintería:
+                if (ing.unidadCompra === "carton") {
+                    // Dividimos el precio del cartón entre 1500 gr (30 huevos de 50gr)
+                    precioPorGramo = precioBase / 1500;
+                } else {
+                    // Dividimos el precio del kilo entre 1000 gr
+                    precioPorGramo = precioBase / 1000;
+                }
+
+                const subTotal = cantidadGramos * precioPorGramo;
                 costoAcumulado += subTotal;
 
                 htmlFilas += `
