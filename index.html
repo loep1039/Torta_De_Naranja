@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Torta de Naranja</title>
+    <title>Calculadora Torta de Naranja Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #f8fafc; }
@@ -17,12 +17,21 @@
             Torta de Naranja
         </h2>
 
+        <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
+            <button onclick="cambiarMolde('cuadrado')" id="btnCuadrado" class="flex-1 py-2 rounded-lg font-bold text-xs uppercase transition-all bg-white text-orange-600 shadow-sm">
+                Cuadrado / Rectangular
+            </button>
+            <button onclick="cambiarMolde('redondo')" id="btnRedondo" class="flex-1 py-2 rounded-lg font-bold text-xs uppercase transition-all text-gray-500">
+                Redondo / Circular
+            </button>
+        </div>
+
         <div class="grid grid-cols-3 gap-4 mb-6">
-            <div>
-                <label class="block text-xs font-bold text-gray-500 uppercase">Largo (cm)</label>
+            <div id="colLargo">
+                <label id="labelLargo" class="block text-xs font-bold text-gray-500 uppercase">Largo (cm)</label>
                 <input type="number" id="largo" value="20" oninput="calcular()" class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-orange-300 outline-none">
             </div>
-            <div>
+            <div id="colAncho">
                 <label class="block text-xs font-bold text-gray-500 uppercase">Ancho (cm)</label>
                 <input type="number" id="ancho" value="20" oninput="calcular()" class="w-full p-2 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-orange-300 outline-none">
             </div>
@@ -37,62 +46,75 @@
                 <span class="font-semibold text-orange-800">Costo Producción:</span>
                 <span id="costoTotal" class="text-xl font-bold text-orange-700">$0.00</span>
             </div>
-            <p class="text-xs text-orange-600 text-center italic">Precios actualizados desde Google Sheets</p>
+            <p class="text-xs text-orange-600 text-center italic">Sincronizado con Google Sheets</p>
         </div>
 
         <div class="mt-6">
-            <h3 class="text-sm font-bold text-gray-400 uppercase mb-3 tracking-widest text-center">Ingredientes Necesarios</h3>
+            <h3 class="text-xs font-bold text-gray-400 uppercase mb-3 tracking-widest text-center">Ingredientes Necesarios</h3>
             <div class="overflow-hidden rounded-xl border border-gray-100">
                 <table class="w-full text-left text-sm">
                     <thead class="bg-gray-50 text-gray-500 uppercase text-xs">
                         <tr>
                             <th class="px-4 py-2">Ingrediente</th>
-                            <th class="px-4 py-2 text-right">Cantidad (gr/ml)</th>
+                            <th class="px-4 py-2 text-right">Cantidad</th>
                         </tr>
                     </thead>
-                    <tbody id="listaIngredientes" class="divide-y divide-gray-50">
-                        </tbody>
+                    <tbody id="listaIngredientes" class="divide-y divide-gray-50"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
     <script>
-        // 1. TU URL DE GOOGLE APPS SCRIPT
         const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvf06emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9KxCP3oBg/exec";
-        
         let precios = {};
+        let modoMolde = 'cuadrado';
 
-        // 2. FUNCIÓN PARA CARGAR LOS PRECIOS
+        function cambiarMolde(tipo) {
+            modoMolde = tipo;
+            const btnC = document.getElementById('btnCuadrado');
+            const btnR = document.getElementById('btnRedondo');
+            const colAncho = document.getElementById('colAncho');
+            const labelLargo = document.getElementById('labelLargo');
+
+            if(tipo === 'redondo') {
+                btnR.className = "flex-1 py-2 rounded-lg font-bold text-xs uppercase bg-white text-orange-600 shadow-sm";
+                btnC.className = "flex-1 py-2 rounded-lg font-bold text-xs uppercase text-gray-500";
+                colAncho.style.display = 'none';
+                labelLargo.innerText = "Diámetro (cm)";
+            } else {
+                btnC.className = "flex-1 py-2 rounded-lg font-bold text-xs uppercase bg-white text-orange-600 shadow-sm";
+                btnR.className = "flex-1 py-2 rounded-lg font-bold text-xs uppercase text-gray-500";
+                colAncho.style.display = 'block';
+                labelLargo.innerText = "Largo (cm)";
+            }
+            calcular();
+        }
+
         async function cargarPrecios() {
             try {
                 const res = await fetch(URL_NUBE);
                 precios = await res.json();
-                console.log("Precios sincronizados con éxito");
             } catch (e) {
-                console.warn("Fallo conexión, usando precios de respaldo");
-                // Precios de emergencia
-                precios = { 
-                    "Harina": 0.001, 
-                    "Azúcar": 0.001, 
-                    "Margarina": 0.002, 
-                    "Vainilla": 0.002,
-                    "Huevos": 0.010 
-                };
+                precios = { "Harina": 0.001, "Azúcar": 0.001, "Margarina": 0.002, "Vainilla": 0.002, "Huevos": 0.010 };
             }
-            calcular(); // Se calcula la primera vez al cargar la página
+            calcular();
         }
 
-        // 3. FUNCIÓN PARA CALCULAR VOLUMEN, COSTO E INGREDIENTES
         function calcular() {
             const l = parseFloat(document.getElementById('largo').value) || 0;
             const a = parseFloat(document.getElementById('ancho').value) || 0;
             const h = parseFloat(document.getElementById('alto').value) || 0;
             
-            const volumen = l * a * h;
+            let volumen = 0;
+            if(modoMolde === 'cuadrado') {
+                volumen = l * a * h;
+            } else {
+                // Radio = Diámetro / 2. Volumen cilindro = π * r² * h
+                const radio = l / 2;
+                volumen = Math.PI * Math.pow(radio, 2) * h;
+            }
 
-            // RECETA BASE: Cantidad (en gramos o ml) por cada 1 cm cúbico
-            // NOTA: Ajusta estos factores según tu receta real.
             const receta = [
                 { nombre: "Harina", factor: 0.25 },
                 { nombre: "Azúcar", factor: 0.20 },
@@ -106,28 +128,20 @@
 
             receta.forEach(ing => {
                 const cantidad = volumen * ing.factor;
-                // El nombre debe coincidir EXACTAMENTE con tu Excel
-                const precioUnitario = precios[ing.nombre] || 0; 
+                const precio = precios[ing.nombre] || 0;
+                costoTotal += (cantidad * precio);
+                const unidad = ing.nombre === 'Vainilla' ? 'ml' : 'gr';
                 
-                costoTotal += (cantidad * precioUnitario);
-
-                const unidad = (ing.nombre === 'Vainilla' || ing.nombre === 'Aceite') ? 'ml' : 'gr';
-                
-                // Construimos las filas de la tabla
-                htmlTabla += `
-                    <tr class="hover:bg-orange-50 transition-colors">
-                        <td class="px-4 py-2 text-gray-700 font-medium">${ing.nombre}</td>
-                        <td class="px-4 py-2 text-right text-orange-600 font-bold">${cantidad.toFixed(1)} ${unidad}</td>
-                    </tr>
-                `;
+                htmlTabla += `<tr class="hover:bg-orange-50 transition-colors">
+                    <td class="px-4 py-2 font-medium">${ing.nombre}</td>
+                    <td class="px-4 py-2 text-right text-orange-600 font-bold">${cantidad.toFixed(1)} ${unidad}</td>
+                </tr>`;
             });
 
-            // Actualizamos el costo y la tabla en el HTML
             document.getElementById('costoTotal').innerText = `$${costoTotal.toFixed(2)}`;
             document.getElementById('listaIngredientes').innerHTML = htmlTabla;
         }
 
-        // 4. INICIAMOS AL CARGAR LA PÁGINA
         window.onload = cargarPrecios;
     </script>
 </body>
