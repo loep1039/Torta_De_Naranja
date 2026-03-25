@@ -41,12 +41,12 @@
             </div>
         </div>
 
-        <div class="bg-orange-50 rounded-xl p-4 border border-orange-200 mb-6">
+        <div class="bg-orange-50 rounded-xl p-4 border border-orange-200 mb-6 text-center">
             <div class="flex justify-between items-center border-b border-orange-200 pb-2 mb-2">
                 <span class="font-semibold text-orange-800 uppercase text-sm">Costo Total Producción:</span>
-                <span id="costoTotal" class="text-2xl font-bold text-orange-700">$0.00</span>
+                <span id="costoTotal" class="text-3xl font-bold text-orange-700">$0.00</span>
             </div>
-            <p class="text-[10px] text-orange-600 text-center italic uppercase tracking-tighter">Precios vinculados a Google Sheets</p>
+            <p id="estadoConexion" class="text-[9px] text-gray-400 uppercase tracking-widest">Cargando precios de la nube...</p>
         </div>
 
         <div>
@@ -87,12 +87,18 @@
             try {
                 const res = await fetch(URL_NUBE);
                 const data = await res.json();
-                // Convertimos todas las llaves a minúsculas para evitar errores de coincidencia
+                
+                // Normalizamos las llaves del Excel para que no importen mayúsculas ni espacios
                 precios = Object.keys(data).reduce((acc, key) => {
-                    acc[key.toLowerCase().trim()] = data[key];
+                    acc[key.toLowerCase().trim()] = parseFloat(String(data[key]).replace(',', '.'));
                     return acc;
                 }, {});
+                
+                document.getElementById('estadoConexion').innerText = "✓ Precios Sincronizados con Google Sheets";
+                document.getElementById('estadoConexion').classList.replace('text-gray-400', 'text-green-600');
             } catch (e) {
+                document.getElementById('estadoConexion').innerText = "⚠ Error al conectar con los precios";
+                document.getElementById('estadoConexion').classList.replace('text-gray-400', 'text-red-500');
                 console.error("Fallo carga de precios", e);
             }
             calcular();
@@ -105,7 +111,7 @@
             
             let volumen = (modoMolde === 'cuadrado') ? (l * a * h) : (Math.PI * Math.pow(l / 2, 2) * h);
 
-            // La receta usa los nombres EXACTOS de tu columna A del Excel
+            // Nombres exactos para coincidir con tu Columna A de Excel
             const receta = [
                 { nombre: "Harina", factor: 0.20 },
                 { nombre: "Jugo de Naranja", factor: 0.15 },
@@ -122,7 +128,7 @@
 
             receta.forEach(ing => {
                 const cantidad = volumen * ing.factor;
-                // Buscamos el precio en minúsculas para que siempre coincida
+                // Búsqueda insensible a mayúsculas
                 const precioUnitario = precios[ing.nombre.toLowerCase().trim()] || 0; 
                 const subTotal = cantidad * precioUnitario;
                 
@@ -131,7 +137,7 @@
                 htmlFilas += `
                     <tr class="hover:bg-orange-50/50 transition-colors">
                         <td class="px-4 py-3 font-medium text-gray-700">${ing.nombre}</td>
-                        <td class="px-2 py-3 text-center text-gray-500">${cantidad.toFixed(1)} ${ing.nombre === 'Vainilla' || ing.nombre === 'Aceite' || ing.nombre === 'Jugo de Naranja' ? 'ml' : 'gr'}</td>
+                        <td class="px-2 py-3 text-center text-gray-500">${cantidad.toFixed(1)} ${['Vainilla', 'Aceite', 'Jugo de Naranja'].includes(ing.nombre) ? 'ml' : 'gr'}</td>
                         <td class="px-4 py-3 text-right text-orange-600 font-bold">$${subTotal.toFixed(3)}</td>
                     </tr>
                 `;
