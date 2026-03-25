@@ -3,80 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Panadería - Gestión de Costos</title>
+    <title>Calculadora Panadería Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #f8fafc; }
-        .card-shadow { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        body { background-color: #f1f5f9; }
+        .card-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); }
     </style>
 </head>
-<body class="p-4 md:p-8 font-sans text-gray-800">
+<body class="p-4 md:p-6 font-sans text-gray-800">
 
-    <div class="max-w-2xl mx-auto bg-white rounded-3xl p-6 card-shadow border border-orange-100">
-        <h2 class="text-2xl font-black text-center text-orange-600 mb-6 uppercase tracking-tighter">
-            Torta de Naranja
-        </h2>
-
-        <div class="flex bg-gray-100 p-1 rounded-2xl mb-6">
-            <button onclick="cambiarMolde('cuadrado')" id="btnCuadrado" class="flex-1 py-3 rounded-xl font-bold text-xs uppercase transition-all bg-white text-orange-600 shadow-sm">
-                Cuadrado
-            </button>
-            <button onclick="cambiarMolde('redondo')" id="btnRedondo" class="flex-1 py-3 rounded-xl font-bold text-xs uppercase transition-all text-gray-500">
-                Redondo
-            </button>
+    <div class="max-w-xl mx-auto bg-white rounded-3xl overflow-hidden card-shadow border border-gray-100">
+        <div class="bg-orange-600 p-5 text-center">
+            <h2 class="text-lg font-black text-white uppercase tracking-[0.2em]">
+                Torta de Naranja
+            </h2>
+            <p class="text-[10px] text-orange-100 font-bold uppercase mt-1">Calculadora de Producción</p>
         </div>
 
-        <div class="grid grid-cols-3 gap-3 mb-8">
-            <div id="colLargo">
-                <label id="labelLargo" class="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Largo (cm)</label>
-                <input type="number" id="largo" value="20" oninput="calcular()" class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-orange-400 outline-none font-bold text-lg">
+        <div class="p-6">
+            <div class="flex bg-gray-100 p-1 rounded-xl mb-6 text-[11px] font-bold uppercase">
+                <button onclick="cambiarMolde('cuadrado')" id="btnCuadrado" class="flex-1 py-2 rounded-lg transition-all bg-white text-orange-600 shadow-sm">
+                    Cuadrado / Rectangular
+                </button>
+                <button onclick="cambiarMolde('redondo')" id="btnRedondo" class="flex-1 py-2 rounded-lg transition-all text-gray-400">
+                    Redondo / Circular
+                </button>
             </div>
-            <div id="colAncho">
-                <label class="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Ancho (cm)</label>
-                <input type="number" id="ancho" value="20" oninput="calcular()" class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-orange-400 outline-none font-bold text-lg">
-            </div>
-            <div>
-                <label class="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1">Alto (cm)</label>
-                <input type="number" id="alto" value="8" oninput="calcular()" class="w-full p-3 border-2 border-gray-100 rounded-xl focus:border-orange-400 outline-none font-bold text-lg">
-            </div>
-        </div>
 
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-orange-600 rounded-2xl p-4 text-white shadow-lg shadow-orange-200">
-                <p class="text-[10px] uppercase font-bold opacity-80 mb-1">Costo Total</p>
-                <p id="costoTotal" class="text-2xl font-black">$0,00</p>
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <div id="colLargo">
+                    <label id="labelLargo" class="block text-[9px] font-black text-gray-400 uppercase mb-1 ml-1">Largo (cm)</label>
+                    <input type="number" id="largo" value="20" oninput="calcular()" class="w-full p-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center">
+                </div>
+                <div id="colAncho">
+                    <label class="block text-[9px] font-black text-gray-400 uppercase mb-1 ml-1">Ancho (cm)</label>
+                    <input type="number" id="ancho" value="20" oninput="calcular()" class="w-full p-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center">
+                </div>
+                <div>
+                    <label class="block text-[9px] font-black text-gray-400 uppercase mb-1 ml-1">Alto (cm)</label>
+                    <input type="number" id="alto" value="8" oninput="calcular()" class="w-full p-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none font-bold text-center">
+                </div>
             </div>
-            <div class="bg-gray-800 rounded-2xl p-4 text-white shadow-lg shadow-gray-200">
-                <p class="text-[10px] uppercase font-bold opacity-80 mb-1">Peso de Masa</p>
-                <p id="pesoTotalMasa" class="text-2xl font-black">0 gr</p>
+
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <div class="bg-orange-50 border border-orange-100 rounded-2xl p-3 text-center">
+                    <p class="text-[9px] uppercase font-black text-orange-400 mb-0.5">Costo Total</p>
+                    <p id="costoTotal" class="text-xl font-black text-orange-700">$0,00</p>
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-3 text-center">
+                    <p class="text-[9px] uppercase font-black text-slate-400 mb-0.5">Peso de Masa</p>
+                    <p id="pesoTotalMasa" class="text-xl font-black text-slate-700">0 gr</p>
+                </div>
             </div>
-        </div>
 
-        <div class="mb-6 text-center">
-            <span id="estadoConexion" class="px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-gray-100 text-gray-400">
-                Sincronizando...
-            </span>
-        </div>
+            <div class="mb-4 text-center">
+                <span id="estadoConexion" class="px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider bg-gray-100 text-gray-400">
+                    Sincronizando...
+                </span>
+            </div>
 
-        <div class="overflow-hidden rounded-2xl border border-gray-100">
-            <table class="w-full text-left">
-                <thead class="bg-gray-50 text-gray-400 uppercase text-[9px] font-black">
-                    <tr>
-                        <th class="px-4 py-4">Insumo</th>
-                        <th class="px-4 py-4 text-right">Cantidad / Precio</th>
-                    </tr>
-                </thead>
-                <tbody id="listaIngredientes" class="divide-y divide-gray-50"></tbody>
-            </table>
+            <div class="overflow-hidden rounded-xl border border-gray-100">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50 text-gray-400 uppercase text-[9px] font-black">
+                        <tr>
+                            <th class="pl-4 py-3 w-10">#</th>
+                            <th class="py-3">Ingrediente</th>
+                            <th class="pr-4 py-3 text-right">Cantidad / Sub-Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaIngredientes" class="divide-y divide-gray-50"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
-        const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvfo6emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9QkXcP3oBg/exec";
+        const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvfo6emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9KxCP3oBg/exec";
         let precios = {};
         let modoMolde = 'cuadrado';
 
-        // Función para formato Latinoamericano (Punto para miles, Coma para decimales)
         function formatLatam(num, dec = 2) {
             return new Intl.NumberFormat('de-DE', {
                 minimumFractionDigits: dec,
@@ -86,18 +91,20 @@
 
         function cambiarMolde(tipo) {
             modoMolde = tipo;
-            document.getElementById('colAncho').style.display = (tipo === 'redondo') ? 'none' : 'block';
+            document.getElementById('colAncho').style.visibility = (tipo === 'redondo') ? 'hidden' : 'visible';
             document.getElementById('labelLargo').innerText = (tipo === 'redondo') ? "Diámetro (cm)" : "Largo (cm)";
             
             const btnC = document.getElementById('btnCuadrado');
             const btnR = document.getElementById('btnRedondo');
             
             if(tipo === 'cuadrado') {
-                btnC.className = "flex-1 py-3 rounded-xl font-bold text-xs uppercase bg-white text-orange-600 shadow-sm";
-                btnR.className = "flex-1 py-3 rounded-xl font-bold text-xs uppercase text-gray-500";
+                btnC.classList.add('bg-white', 'text-orange-600', 'shadow-sm');
+                btnR.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
+                btnR.classList.add('text-gray-400');
             } else {
-                btnR.className = "flex-1 py-3 rounded-xl font-bold text-xs uppercase bg-white text-orange-600 shadow-sm";
-                btnC.className = "flex-1 py-3 rounded-xl font-bold text-xs uppercase text-gray-500";
+                btnR.classList.add('bg-white', 'text-orange-600', 'shadow-sm');
+                btnC.classList.remove('bg-white', 'text-orange-600', 'shadow-sm');
+                btnC.classList.add('text-gray-400');
             }
             calcular();
         }
@@ -113,12 +120,12 @@
                 }, {});
                 
                 const status = document.getElementById('estadoConexion');
-                status.innerText = "✓ Conectado a la Nube";
-                status.className = "px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-green-100 text-green-600";
+                status.innerText = "✓ Precios Actualizados";
+                status.className = "px-3 py-1 rounded-full text-[9px] font-bold uppercase bg-green-50 text-green-500";
             } catch (e) {
                 const status = document.getElementById('estadoConexion');
                 status.innerText = "⚠ Usando Datos Locales";
-                status.className = "px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-red-100 text-red-600";
+                status.className = "px-3 py-1 rounded-full text-[9px] font-bold uppercase bg-red-50 text-red-400";
             }
             calcular();
         }
@@ -145,7 +152,7 @@
             let pesoTotalMasa = 0;
             let html = "";
 
-            receta.forEach(ing => {
+            receta.forEach((ing, index) => {
                 const gr = volumen * ing.factor;
                 pesoTotalMasa += gr;
                 
@@ -155,13 +162,12 @@
                 costoTotal += subtotal;
 
                 html += `
-                    <tr class="hover:bg-orange-50/50">
-                        <td class="px-4 py-4 font-bold text-gray-700 text-sm">
-                            ${ing.nombre}
-                        </td>
-                        <td class="px-4 py-4 text-right">
-                            <div class="text-sm font-black text-gray-900">${formatLatam(gr, 1)} gr</div>
-                            <div class="text-[11px] font-bold text-orange-500">$ ${formatLatam(subtotal, 3)}</div>
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="pl-4 py-3 text-[10px] font-black text-gray-300 italic">${index + 1}</td>
+                        <td class="py-3 text-[12px] font-bold text-gray-700">${ing.nombre}</td>
+                        <td class="pr-4 py-3 text-right">
+                            <div class="text-[12px] font-black text-gray-900">${formatLatam(gr, 1)} gr</div>
+                            <div class="text-[10px] font-bold text-orange-400">$ ${formatLatam(subtotal, 3)}</div>
                         </td>
                     </tr>
                 `;
