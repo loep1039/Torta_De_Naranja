@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Torta de Naranja - Gestión de Precios</title>
+    <title>Calculadora Torta de Naranja - Pesaje Exacto</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #f8fafc; }
@@ -95,12 +95,13 @@
                 const res = await fetch(URL_NUBE);
                 const data = await res.json();
                 precios = Object.keys(data).reduce((acc, key) => {
-                    acc[key.toLowerCase().trim()] = data[key];
+                    // Limpieza profunda de los nombres para asegurar el match
+                    acc[key.toLowerCase().trim()] = parseFloat(String(data[key]).replace(',', '.'));
                     return acc;
                 }, {});
                 
                 const statusMsg = document.getElementById('estadoConexion');
-                statusMsg.innerText = "✓ Precios Actualizados";
+                statusMsg.innerText = "✓ Precios Sincronizados";
                 statusMsg.style.color = "#16a34a";
             } catch (e) {
                 const statusMsg = document.getElementById('estadoConexion');
@@ -117,7 +118,6 @@
             
             let volumen = (modoMolde === 'cuadrado') ? (l * a * h) : (Math.PI * Math.pow(l / 2, 2) * h);
 
-            // Factores ajustados para pesaje directo (gr)
             const receta = [
                 { nombre: "Harina", factor: 0.20 },
                 { nombre: "Jugo de Naranja", factor: 0.15 },
