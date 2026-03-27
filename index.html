@@ -3,192 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Torta de Naranja Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Gestión Torta de Naranja - Fernando Araujo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8fafc; }
-        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        :root {
+            --primario-torta: #ff9800; 
+            --torta-oscuro: #e65100;
+            --fondo-gris: #f8faf9;
+            --texto-oscuro: #1a202c;
+            --blanco: #ffffff;
+            --gris-claro: #edf2f7;
+            --torta-claro: #fff3e0; 
+            --torta-borde: #ffcc80;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--blanco);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .status-bar {
+            font-size: 0.65rem;
+            padding: 8px;
+            text-align: center;
+            background: #f1f5f9;
+            color: #718096;
+            font-weight: 600;
+        }
+
+        .header-card {
+            background-color: var(--primario-torta);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 20px 20px 0 0;
+            margin: 10px;
+        }
+
+        .header-card p { margin: 0; font-size: 0.65rem; opacity: 0.9; text-transform: uppercase;}
+        .header-card h1 { margin: 5px 0 0; font-size: 1.3rem; letter-spacing: 2px; font-weight: 800; text-transform: uppercase; }
+
+        .tabs {
+            display: flex;
+            padding: 0 20px;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--torta-borde);
+            background: var(--blanco);
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            color: var(--torta-oscuro);
+        }
+
+        .tab-btn.active {
+            background: var(--primario-torta);
+            color: white;
+        }
+
+        .inputs-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 10px 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-group label {
+            font-size: 0.55rem;
+            font-weight: bold;
+            color: #a0aec0;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .val-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--gris-claro);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            background: #f7fafc;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 10px 20px 20px;
+        }
+
+        .card {
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid var(--gris-claro);
+        }
+
+        .card.cost { background-color: var(--torta-claro); border: 1.5px solid var(--torta-borde); }
+        .label-mini { font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: bold; }
+        .card-val { font-size: 1.1rem; font-weight: bold; display: block; }
+
+        .list { padding: 10px 20px; }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .ing-name { font-weight: 700; font-size: 0.85rem; }
+        .ing-results { text-align: right; }
+        .ing-qty { display: block; font-weight: 700; font-size: 0.9rem; }
+        .ing-price { font-size: 0.65rem; color: var(--primario-torta); font-weight: bold; }
+
+        .footer { padding: 20px; }
+        .btn-copy {
+            background-color: var(--primario-torta);
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
     </style>
 </head>
-<body class="p-4 md:p-8 font-sans">
+<body>
 
-    <div class="max-w-lg mx-auto bg-white rounded-[2rem] overflow-hidden card-shadow border border-slate-100">
-        <div class="bg-gradient-to-r from-orange-500 to-amber-500 p-6 text-center">
-            <h2 class="text-xl font-black text-white uppercase tracking-widest">
-                Torta de Naranja
-            </h2>
-            <div class="h-1 w-12 bg-white/30 mx-auto mt-2 rounded-full"></div>
+<div class="phone-container">
+    <div id="status" class="status-bar">Sincronizando precios...</div>
+    
+    <div class="header-card">
+        <p>SISTEMA DE GESTIÓN - FERNANDO ARAUJO</p>
+        <h1>TORTA DE NARANJA</h1>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('rect')">Cuadrada / Rect.</button>
+        <button class="tab-btn" onclick="switchTab('round')">Redonda / Circ.</button>
+    </div>
+
+    <div id="inputs-rect" class="inputs-container">
+        <div class="input-group">
+            <label>Largo (cm)</label>
+            <input type="number" id="largo" class="val-input" value="39" oninput="calcular()">
         </div>
-
-        <div class="p-6">
-            <div class="flex bg-slate-100 p-1 rounded-2xl mb-8">
-                <button onclick="cambiarMolde('cuadrado')" id="btnCuadrado" class="flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase transition-all bg-white text-orange-600 shadow-sm">
-                    Cuadrado / Rectangular
-                </button>
-                <button onclick="cambiarMolde('redondo')" id="btnRedondo" class="flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase transition-all text-slate-400">
-                    Redondo / Circular
-                </button>
-            </div>
-
-            <div class="grid grid-cols-3 gap-4 mb-8">
-                <div>
-                    <label id="labelLargo" class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1 text-center">Largo (cm)</label>
-                    <input type="number" id="largo" value="39" oninput="calcular()" class="w-full p-3 bg-slate-50 border-2 border-transparent focus:border-orange-400 rounded-2xl outline-none font-bold text-center text-slate-700 transition-all">
-                </div>
-                <div id="colAncho">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1 text-center">Ancho (cm)</label>
-                    <input type="number" id="ancho" value="28" oninput="calcular()" class="w-full p-3 bg-slate-50 border-2 border-transparent focus:border-orange-400 rounded-2xl outline-none font-bold text-center text-slate-700 transition-all">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 ml-1 text-center">Alto (cm)</label>
-                    <input type="number" id="alto" value="2.5" oninput="calcular()" class="w-full p-3 bg-slate-50 border-2 border-transparent focus:border-orange-400 rounded-2xl outline-none font-bold text-center text-slate-700 transition-all">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-8">
-                <div class="bg-orange-50/50 border border-orange-100 rounded-3xl p-4 text-center">
-                    <p class="text-[10px] uppercase font-bold text-orange-400 mb-1">Costo Producción</p>
-                    <p id="costoTotal" class="text-2xl font-black text-orange-600">$ 0,00</p>
-                </div>
-                <div class="bg-slate-50 border border-slate-100 rounded-3xl p-4 text-center">
-                    <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Masa Total</p>
-                    <p id="pesoTotalMasa" class="text-2xl font-black text-slate-700">0 gr</p>
-                </div>
-            </div>
-
-            <div class="flex justify-center mb-6">
-                <span id="estadoConexion" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-slate-100 text-slate-400 transition-all">
-                    Sincronizando precios...
-                </span>
-            </div>
-
-            <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
-                <table class="w-full text-left">
-                    <thead class="bg-slate-50">
-                        <tr>
-                            <th class="pl-4 py-4 text-[10px] font-bold text-slate-400 uppercase w-12">#</th>
-                            <th class="py-4 text-[10px] font-bold text-slate-400 uppercase">Ingrediente</th>
-                            <th class="pr-4 py-4 text-[10px] font-bold text-slate-400 uppercase text-right">Cantidad / Costo</th>
-                        </tr>
-                    </thead>
-                    <tbody id="listaIngredientes" class="divide-y divide-slate-50">
-                        </tbody>
-                </table>
-            </div>
+        <div class="input-group">
+            <label>Ancho (cm)</label>
+            <input type="number" id="ancho" class="val-input" value="28" oninput="calcular()">
+        </div>
+        <div class="input-group">
+            <label>Alto (cm)</label>
+            <input type="number" id="alto-rect" class="val-input" value="2.5" oninput="calcular()">
         </div>
     </div>
 
-    <script>
-        const URL_NUBE = "https://script.google.com/macros/s/AKfycbzl8cTzjvfo6emxsDCrhRSaGo2ImlLU2Mgiu8_NDiaW6dSQHw6wv4-XJLiq9QkXcP3oBg/exec"; // Pegar la URL /exec
-        let precios = {};
-        let modoMolde = 'cuadrado';
+    <div id="inputs-round" class="inputs-container" style="display: none;">
+        <div class="input-group">
+            <label>Diámetro (cm)</label>
+            <input type="number" id="diametro" class="val-input" value="20" oninput="calcular()">
+        </div>
+        <div class="input-group">
+            <label>Alto (cm)</label>
+            <input type="number" id="alto-round" class="val-input" value="10" oninput="calcular()">
+        </div>
+    </div>
 
-        function formatLatam(num, dec = 2) {
-            return new Intl.NumberFormat('de-DE', {
-                minimumFractionDigits: dec,
-                maximumFractionDigits: dec
-            }).format(num);
-        }
+    <div class="summary">
+        <div class="card cost">
+            <span class="label-mini">Costo Producción</span>
+            <span id="resCosto" class="card-val">$ 0.00</span>
+        </div>
+        <div class="card">
+            <span class="label-mini">Masa Total</span>
+            <span id="resMasa" class="card-val">0 g</span>
+        </div>
+    </div>
 
-        function cambiarMolde(tipo) {
-            modoMolde = tipo;
-            document.getElementById('colAncho').style.display = (tipo === 'redondo') ? 'none' : 'block';
-            document.getElementById('labelLargo').innerText = (tipo === 'redondo') ? "Diámetro (cm)" : "Largo (cm)";
-            
-            const btnC = document.getElementById('btnCuadrado');
-            const btnR = document.getElementById('btnRedondo');
-            
-            if(tipo === 'cuadrado') {
-                btnC.className = "flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase bg-white text-orange-600 shadow-sm";
-                btnR.className = "flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase text-slate-400";
-            } else {
-                btnR.className = "flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase bg-white text-orange-600 shadow-sm";
-                btnC.className = "flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase text-slate-400";
-            }
-            calcular();
-        }
+    <div class="list" id="listaIngredientes"></div>
 
-        async function cargarPrecios() {
-            try {
-                const res = await fetch(URL_NUBE);
-                const data = await res.json();
-                precios = Object.keys(data).reduce((acc, key) => {
-                    let p = String(data[key]).replace('$', '').replace(/\s/g, '').replace(',', '.');
-                    acc[key.toLowerCase().trim()] = parseFloat(p) || 0;
-                    return acc;
-                }, {});
-                
-                const status = document.getElementById('estadoConexion');
-                status.innerText = "✓ Precios Sincronizados";
-                status.className = "px-4 py-1.5 rounded-full text-[10px] font-black uppercase bg-green-50 text-green-500";
-            } catch (e) {
-                document.getElementById('estadoConexion').innerText = "⚠ Usando Precios Locales";
-            }
-            calcular();
-        }
+    <div class="footer">
+        <button class="btn-copy" onclick="copiarAlPortapapeles()">Copiar al Portapapeles</button>
+    </div>
+</div>
 
-        function calcular() {
-            const l = parseFloat(document.getElementById('largo').value) || 0;
-            const a = parseFloat(document.getElementById('ancho').value) || 0;
-            const h = parseFloat(document.getElementById('alto').value) || 0;
-            
-            // 1. Calcular Volumen
-            const volumen = (modoMolde === 'cuadrado') ? (l * a * h) : (Math.PI * Math.pow(l/2, 2) * h);
+<script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyK0o_LRZg2b75mrPzU63l6bPjFac01LWs3DA5tFVXJ3yR97DbBek1zEVD7JJySiDas/exec";
+    let currentShape = 'rect';
 
-            // 2. Factor de Densidad de tu tabla (Masa / Volumen) -> aprox 0.4201
-            const masaObjetivo = volumen * 0.4201;
+    const RECETA = {
+        nombre: "Torta de Naranja",
+        factorHarina: 0.12058, // g de harina por cm3 (calculado de tu tabla 329.2g / (39*28*2.5))
+        items: [
+            { nombre: "Harina", pct: 100.0, precioKg: 0 },
+            { nombre: "Jugo de Naranja", pct: 39.2, precioKg: 0 },
+            { nombre: "Azúcar", pct: 95.7, precioKg: 0 },
+            { nombre: "Polvo de Hornear", pct: 3.4, precioKg: 0 },
+            { nombre: "Aceite", pct: 32.6, precioKg: 0 },
+            { nombre: "Sal", pct: 2.3, precioKg: 0 },
+            { nombre: "Huevos", pct: 71.9, precioKg: 0 },
+            { nombre: "Vainilla", pct: 3.0, precioKg: 0 }
+        ]
+    };
 
-            // 3. Porcentajes exactos de tu columna "C" en la tabla
-            const receta = [
-                { nombre: "Harina", pct: 100 },
-                { nombre: "Jugo de Naranja", pct: 39.2 },
-                { nombre: "Azúcar", pct: 95.7 },
-                { nombre: "Polvo de Hornear", pct: 3.4 },
-                { nombre: "Aceite", pct: 32.6 },
-                { nombre: "Sal", pct: 2.3 },
-                { nombre: "Huevos", pct: 71.9 },
-                { nombre: "Vainilla", pct: 3 }
-            ];
+    function switchTab(shape) {
+        currentShape = shape;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById('inputs-rect').style.display = shape === 'rect' ? 'grid' : 'none';
+        document.getElementById('inputs-round').style.display = shape === 'round' ? 'grid' : 'none';
+        calcular();
+    }
 
-            // Suma total de porcentajes: 348.1%
-            const sumaPorcentajes = receta.reduce((acc, ing) => acc + ing.pct, 0);
-            
-            // Calcular la base (100% de Harina)
-            const baseHarina = masaObjetivo / (sumaPorcentajes / 100);
-
-            let costoTotal = 0;
-            let html = "";
-
-            receta.forEach((ing, index) => {
-                const cantidadGramos = baseHarina * (ing.pct / 100);
-                
-                // Buscar precio en la tabla de Google Sheets
-                const precioBase = precios[ing.nombre.toLowerCase().trim()] || 0;
-                
-                // Si es huevos, asumimos precio por cartón (1500g aprox), sino por kilo
-                const divisor = (ing.nombre.toLowerCase().includes("huevo")) ? 1500 : 1000;
-                const subtotal = cantidadGramos * (precioBase / divisor);
-                
-                costoTotal += subtotal;
-
-                html += `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="pl-4 py-4 text-[10px] font-black text-slate-300 italic">${index + 1}</td>
-                        <td class="py-4 font-bold text-slate-700 text-[13px]">${ing.nombre} <span class="text-[9px] text-slate-300 ml-1">(${ing.pct}%)</span></td>
-                        <td class="pr-4 py-4 text-right">
-                            <div class="text-[13px] font-black text-slate-900">${formatLatam(cantidadGramos, 1)} gr</div>
-                            <div class="text-[10px] font-bold text-orange-400">$ ${formatLatam(subtotal, 3)}</div>
-                        </td>
-                    </tr>
-                `;
+    async function sincronizarPrecios() {
+        try {
+            const response = await fetch(WEB_APP_URL);
+            const data = await response.json();
+            RECETA.items.forEach(ing => {
+                const encontrado = data.find(p => p.nombre.toLowerCase().trim() === ing.nombre.toLowerCase());
+                if (encontrado) ing.precioKg = encontrado.precioKg;
             });
+            document.getElementById('status').innerText = "Precios Actualizados";
+            calcular();
+        } catch (e) { document.getElementById('status').innerText = "Error conexión"; calcular(); }
+    }
 
-            document.getElementById('costoTotal').innerText = `$ ${formatLatam(costoTotal, 2)}`;
-            document.getElementById('pesoTotalMasa').innerText = `${formatLatam(masaObjetivo, 0)} gr`;
-            document.getElementById('listaIngredientes').innerHTML = html;
+    function calcular() {
+        let volumen = 0;
+        if (currentShape === 'rect') {
+            const l = parseFloat(document.getElementById('largo').value) || 0;
+            const w = parseFloat(document.getElementById('ancho').value) || 0;
+            const h = parseFloat(document.getElementById('alto-rect').value) || 0;
+            volumen = l * w * h;
+        } else {
+            const d = parseFloat(document.getElementById('diametro').value) || 0;
+            const h = parseFloat(document.getElementById('alto-round').value) || 0;
+            volumen = Math.PI * Math.pow(d/2, 2) * h;
         }
 
-        window.onload = cargarPrecios;
-    </script>
+        const harinaBase = volumen * RECETA.factorHarina;
+        const contenedor = document.getElementById('listaIngredientes');
+        contenedor.innerHTML = '';
+        let masaTotal = 0;
+        let costoTotal = 0;
+
+        RECETA.items.forEach(ing => {
+            const gramos = harinaBase * (ing.pct / 100);
+            let divisor = (ing.nombre === "Huevos") ? 1500 : 1000;
+            const costo = (gramos / divisor) * ing.precioKg;
+            masaTotal += gramos;
+            costoTotal += costo;
+
+            contenedor.innerHTML += `
+                <div class="item">
+                    <span class="ing-name">${ing.nombre}</span>
+                    <div class="ing-results">
+                        <span class="ing-qty">${gramos.toFixed(1)} g</span>
+                        <span class="ing-price">$ ${costo.toFixed(2)}</span>
+                    </div>
+                </div>`;
+        });
+
+        document.getElementById('resMasa').innerText = `${masaTotal.toFixed(0)} g`;
+        document.getElementById('resCosto').innerText = `$ ${costoTotal.toFixed(2)}`;
+    }
+
+    function copiarAlPortapapeles() {
+        const masa = document.getElementById('resMasa').innerText;
+        const costo = document.getElementById('resCosto').innerText;
+        let texto = `*TORTA DE NARANJA* - *${costo}*\nMASA TOTAL: ${masa}\n---\n`;
+        
+        // Recalcular para el texto (basado en la lógica de calcular)
+        let volumen = 0;
+        if (currentShape === 'rect') {
+            volumen = (parseFloat(document.getElementById('largo').value)||0)*(parseFloat(document.getElementById('ancho').value)||0)*(parseFloat(document.getElementById('alto-rect').value)||0);
+        } else {
+            volumen = Math.PI * Math.pow((parseFloat(document.getElementById('diametro').value)||0)/2, 2) * (parseFloat(document.getElementById('alto-round').value)||0);
+        }
+        const harinaBase = volumen * RECETA.factorHarina;
+
+        RECETA.items.forEach(ing => {
+            const gramos = harinaBase * (ing.pct / 100);
+            texto += `${ing.nombre}: ${gramos.toFixed(1)}g\n`;
+        });
+
+        const el = document.createElement('textarea');
+        el.value = texto; document.body.appendChild(el); el.select();
+        document.execCommand('copy'); document.body.removeChild(el);
+        alert("Copiado al portapapeles");
+    }
+
+    window.onload = sincronizarPrecios;
+</script>
 </body>
 </html>
