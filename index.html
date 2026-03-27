@@ -7,14 +7,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primario-torta: #ff9800; 
-            --torta-oscuro: #e65100;
+            /* NUEVO ESQUEMA DE COLORES: MORADO PROFESIONAL */
+            --primario-torta: #7e57c2; /* Morado base */
+            --torta-oscuro: #512da8;    /* Morado oscuro para texto/borde */
             --fondo-gris: #f8faf9;
             --texto-oscuro: #1a202c;
             --blanco: #ffffff;
             --gris-claro: #edf2f7;
-            --torta-claro: #fff3e0; 
-            --torta-borde: #ffcc80;
+            --torta-claro: #f3e5f5;   /* Morado ultra claro para fondo tarjeta */
+            --torta-borde: #d1c4e9;   /* Borde tarjeta */
         }
 
         body {
@@ -110,6 +111,7 @@
             text-align: center;
             font-weight: bold;
             background: #f7fafc;
+            color: var(--texto-oscuro);
         }
 
         .summary {
@@ -128,7 +130,9 @@
 
         .card.cost { background-color: var(--torta-claro); border: 1.5px solid var(--torta-borde); }
         .label-mini { font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: bold; }
-        .card-val { font-size: 1.1rem; font-weight: bold; display: block; }
+        .card-val { font-size: 1.1rem; font-weight: bold; display: block; color: var(--texto-oscuro); }
+        .card.cost .label-mini { color: var(--torta-oscuro); }
+        .card.cost .card-val { color: var(--torta-oscuro); }
 
         .list { padding: 10px 20px; }
         .item {
@@ -138,12 +142,12 @@
             padding: 10px 0;
             border-bottom: 1px solid #f1f5f9;
         }
-        .ing-name { font-weight: 700; font-size: 0.85rem; }
+        .ing-name { font-weight: 700; font-size: 0.85rem; color: var(--texto-oscuro); }
         .ing-results { text-align: right; }
-        .ing-qty { display: block; font-weight: 700; font-size: 0.9rem; }
+        .ing-qty { display: block; font-weight: 700; font-size: 0.9rem; color: var(--texto-oscuro); }
         .ing-price { font-size: 0.65rem; color: var(--primario-torta); font-weight: bold; }
 
-        .footer { padding: 20px; }
+        .footer { padding: 20px; text-align: center; }
         .btn-copy {
             background-color: var(--primario-torta);
             color: white;
@@ -154,13 +158,16 @@
             font-weight: bold;
             text-transform: uppercase;
             cursor: pointer;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 12px rgba(126, 87, 194, 0.3);
         }
+        .btn-copy:hover { background-color: var(--torta-oscuro); }
     </style>
 </head>
 <body>
 
 <div class="phone-container">
-    <div id="status" class="status-bar">Sincronizando precios...</div>
+    <div id="status" class="status-bar"><i class="fas fa-sync fa-spin"></i> Sincronizando precios de Google Sheets...</div>
     
     <div class="header-card">
         <p>SISTEMA DE GESTIÓN - FERNANDO ARAUJO</p>
@@ -212,11 +219,14 @@
     <div class="list" id="listaIngredientes"></div>
 
     <div class="footer">
-        <button class="btn-copy" onclick="copiarAlPortapapeles()">Copiar al Portapapeles</button>
+        <button class="btn-copy" onclick="copiarAlPortapapeles()">
+            <i class="fas fa-copy"></i> Copiar al Portapapeles
+        </button>
     </div>
 </div>
 
 <script>
+    // URL DE TU PROPIO SCRIPT DE GOOGLE
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyK0o_LRZg2b75mrPzU63l6bPjFac01LWs3DA5tFVXJ3yR97DbBek1zEVD7JJySiDas/exec";
     let currentShape = 'rect';
 
@@ -252,9 +262,14 @@
                 const encontrado = data.find(p => p.nombre.toLowerCase().trim() === ing.nombre.toLowerCase());
                 if (encontrado) ing.precioKg = encontrado.precioKg;
             });
-            document.getElementById('status').innerText = "Precios Actualizados";
+            const statusEl = document.getElementById('status');
+            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Precios sincronizados desde Google Sheets';
+            statusEl.style.color = "#7e57c2";
             calcular();
-        } catch (e) { document.getElementById('status').innerText = "Error conexión"; calcular(); }
+        } catch (e) { 
+            document.getElementById('status').innerText = "○ Error de conexión: Usando precios base"; 
+            calcular(); 
+        }
     }
 
     function calcular() {
@@ -278,8 +293,11 @@
 
         RECETA.items.forEach(ing => {
             const gramos = harinaBase * (ing.pct / 100);
+            
+            // --- LÓGICA ESPECIAL PARA HUEVOS CONFIRMADA (Divisor 1500) ---
             let divisor = (ing.nombre === "Huevos") ? 1500 : 1000;
             const costo = (gramos / divisor) * ing.precioKg;
+            
             masaTotal += gramos;
             costoTotal += costo;
 
@@ -302,7 +320,6 @@
         const costo = document.getElementById('resCosto').innerText;
         let texto = `*TORTA DE NARANJA* - *${costo}*\nMASA TOTAL: ${masa}\n---\n`;
         
-        // Recalcular para el texto (basado en la lógica de calcular)
         let volumen = 0;
         if (currentShape === 'rect') {
             volumen = (parseFloat(document.getElementById('largo').value)||0)*(parseFloat(document.getElementById('ancho').value)||0)*(parseFloat(document.getElementById('alto-rect').value)||0);
@@ -319,7 +336,7 @@
         const el = document.createElement('textarea');
         el.value = texto; document.body.appendChild(el); el.select();
         document.execCommand('copy'); document.body.removeChild(el);
-        alert("Copiado al portapapeles");
+        alert("Copiado al portapapeles con éxito.");
     }
 
     window.onload = sincronizarPrecios;
