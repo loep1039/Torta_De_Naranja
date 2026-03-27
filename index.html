@@ -226,7 +226,7 @@
 </div>
 
 <script>
-    // URL DE TU PROPIO SCRIPT DE GOOGLE
+    // URL DE MI BASE DE DATOS EN GIST
     const WEB_APP_URL = "https://gist.githubusercontent.com/loep1039/0b9fbae05f40bcd16a9a883c5ef0b999/raw/precios.json";
     let currentShape = 'rect';
 
@@ -263,7 +263,7 @@
                 if (encontrado) ing.precioKg = encontrado.precioKg;
             });
             const statusEl = document.getElementById('status');
-            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Precios sincronizados desde Google Sheets';
+            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Precios sincronizados';
             statusEl.style.color = "#7e57c2";
             calcular();
         } catch (e) { 
