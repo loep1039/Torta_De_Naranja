@@ -2,237 +2,464 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión Torta de Naranja - Fernando Araujo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Torta de Naranja | Gestión de Producción</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Tipografías profesionales -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            /* NUEVO ESQUEMA DE COLORES: MORADO PROFESIONAL */
-            --primario-torta: #7e57c2; /* Morado base */
-            --torta-oscuro: #512da8;    /* Morado oscuro para texto/borde */
-            --fondo-gris: #f8faf9;
-            --texto-oscuro: #1a202c;
-            --blanco: #ffffff;
-            --gris-claro: #edf2f7;
-            --torta-claro: #f3e5f5;   /* Morado ultra claro para fondo tarjeta */
-            --torta-borde: #d1c4e9;   /* Borde tarjeta */
+            --color-primary: #D2691E;
+            --color-primary-dark: #B85C1A;
+            --color-rustic: #8B4513;
+            --color-rustic-light: #A0522D;
+            --bg-cream: #FCF9F5;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C2418;
+            --text-muted: #8B7355;
+            --border-stone: #EEDDCB;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e2e8f0;
-            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-cream);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
+            padding: 16px;
         }
 
-        .phone-container {
+        .product-card {
             width: 100%;
-            max-width: 400px;
-            background: var(--blanco);
-            border-radius: 30px;
+            max-width: 450px;
+            background: var(--bg-card);
+            border-radius: 28px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-stone);
         }
 
-        .status-bar {
-            font-size: 0.65rem;
-            padding: 8px;
+        /* Header */
+        .product-header {
+            background: linear-gradient(135deg, var(--color-rustic) 0%, var(--color-rustic-light) 100%);
+            padding: 18px 16px;
             text-align: center;
-            background: #f1f5f9;
-            color: #718096;
-            font-weight: 600;
+            position: relative;
+            border-bottom: 2px solid var(--color-primary);
         }
 
-        .header-card {
-            background-color: var(--primario-torta);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 20px 20px 0 0;
-            margin: 10px;
+        .product-header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--bg-cream);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 4px;
         }
 
-        .header-card p { margin: 0; font-size: 0.65rem; opacity: 0.9; text-transform: uppercase;}
-        .header-card h1 { margin: 5px 0 0; font-size: 1.3rem; letter-spacing: 2px; font-weight: 800; text-transform: uppercase; }
+        .product-header p {
+            color: rgba(252, 249, 245, 0.8);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
 
-        .tabs {
+        /* Botón de retorno */
+        .back-button {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(252, 249, 245, 0.2);
+            backdrop-filter: blur(6px);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             display: flex;
-            padding: 0 20px;
-            gap: 10px;
-            margin-bottom: 10px;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(252, 249, 245, 0.3);
+        }
+
+        .back-button i {
+            color: var(--bg-cream);
+            font-size: 0.85rem;
+        }
+
+        .back-button:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        /* Pestañas de forma */
+        .shape-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 12px 16px 0;
+            background: var(--bg-cream);
         }
 
         .tab-btn {
             flex: 1;
-            padding: 10px;
-            border: 1px solid var(--torta-borde);
-            background: var(--blanco);
-            border-radius: 10px;
-            font-size: 0.6rem;
-            font-weight: bold;
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-stone);
+            background: var(--bg-card);
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
             cursor: pointer;
             text-transform: uppercase;
-            color: var(--torta-oscuro);
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
         }
 
         .tab-btn.active {
-            background: var(--primario-torta);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
             color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Panel de dimensiones */
+        .dimensions-panel {
+            padding: 12px 16px;
+            background: var(--bg-cream);
+            border-bottom: 1px solid var(--border-stone);
         }
 
         .inputs-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            padding: 10px 20px;
+        }
+
+        .inputs-container.two-cols {
+            grid-template-columns: repeat(2, 1fr);
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 4px;
         }
 
         .input-group label {
-            font-size: 0.55rem;
-            font-weight: bold;
-            color: #a0aec0;
-            margin-bottom: 5px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text-muted);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .val-input {
             width: 100%;
             padding: 8px;
-            border: 1px solid var(--gris-claro);
-            border-radius: 8px;
+            border: 1.5px solid var(--border-stone);
+            border-radius: 16px;
             text-align: center;
-            font-weight: bold;
-            background: #f7fafc;
-            color: var(--texto-oscuro);
+            font-weight: 600;
+            background: var(--bg-card);
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            outline: none;
+            font-family: 'Inter', sans-serif;
         }
 
-        .summary {
+        .val-input:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(210, 105, 30, 0.1);
+        }
+
+        /* Panel de resumen */
+        .summary-panel {
+            padding: 16px;
+            background: var(--bg-cream);
+            border-bottom: 1px solid var(--border-stone);
+        }
+
+        .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            padding: 10px 20px 20px;
+            gap: 10px;
         }
 
-        .card {
-            padding: 15px;
-            border-radius: 15px;
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 10px 8px;
             text-align: center;
-            border: 1px solid var(--gris-claro);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-stone);
         }
 
-        .card.cost { background-color: var(--torta-claro); border: 1.5px solid var(--torta-borde); }
-        .label-mini { font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: bold; }
-        .card-val { font-size: 1.1rem; font-weight: bold; display: block; color: var(--texto-oscuro); }
-        .card.cost .label-mini { color: var(--torta-oscuro); }
-        .card.cost .card-val { color: var(--torta-oscuro); }
+        .stat-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.8px;
+            margin-bottom: 4px;
+        }
 
-        .list { padding: 10px 20px; }
-        .item {
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-value.cost {
+            color: var(--color-primary);
+        }
+
+        /* Lista de ingredientes */
+        .ingredients-list {
+            padding: 6px 16px 16px;
+            background: var(--bg-card);
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-rustic);
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1.5px solid var(--border-stone);
+        }
+
+        .section-title i {
+            margin-right: 6px;
+            font-size: 0.7rem;
+            color: var(--color-primary);
+        }
+
+        .ingredient-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-stone);
         }
-        .ing-name { font-weight: 700; font-size: 0.85rem; color: var(--texto-oscuro); }
-        .ing-results { text-align: right; }
-        .ing-qty { display: block; font-weight: 700; font-size: 0.9rem; color: var(--texto-oscuro); }
-        .ing-price { font-size: 0.65rem; color: var(--primario-torta); font-weight: bold; }
 
-        .footer { padding: 20px; text-align: center; }
-        .btn-copy {
-            background-color: var(--primario-torta);
-            color: white;
-            width: 100%;
-            padding: 18px;
-            border: none;
-            border-radius: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            font-size: 0.8rem;
-            box-shadow: 0 4px 12px rgba(126, 87, 194, 0.3);
+        .ingredient-item:last-child {
+            border-bottom: none;
         }
-        .btn-copy:hover { background-color: var(--torta-oscuro); }
+
+        .ingredient-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.85rem;
+        }
+
+        .ingredient-percent {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            font-weight: normal;
+            margin-left: 4px;
+        }
+
+        .ingredient-details {
+            text-align: right;
+        }
+
+        .ingredient-quantity {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        .ingredient-price {
+            font-size: 0.65rem;
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-top: 1px;
+        }
+
+        /* Botón de acción */
+        .action-button {
+            margin: 6px 16px 20px;
+        }
+
+        .btn-copy {
+            width: 100%;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(210, 105, 30, 0.25);
+        }
+
+        .btn-copy:active {
+            transform: scale(0.98);
+        }
+
+        .copy-message {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--color-primary);
+            margin-top: 8px;
+            display: none;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer-brand {
+            text-align: center;
+            padding: 12px 16px;
+            background: var(--bg-cream);
+            border-top: 1px solid var(--border-stone);
+        }
+
+        .footer-brand span {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
+            .product-header h1 {
+                font-size: 1.3rem;
+            }
+            .stat-value {
+                font-size: 1rem;
+            }
+            .ingredient-name {
+                font-size: 0.75rem;
+            }
+            .ingredient-quantity {
+                font-size: 0.7rem;
+            }
+            .inputs-container {
+                gap: 6px;
+            }
+            .val-input {
+                padding: 6px;
+                font-size: 0.75rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-<div class="phone-container">
-    <div id="status" class="status-bar"><i class="fas fa-sync fa-spin"></i> Sincronizando precios de Google Sheets...</div>
-    
-    <div class="header-card">
-        <p>SISTEMA DE GESTIÓN - FERNANDO ARAUJO</p>
+<div class="product-card">
+    <div class="product-header">
+        <a href="https://loep1039.github.io/Menu_Panaderia/" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+        </a>
         <h1>TORTA DE NARANJA</h1>
+        <p>Fernando Araujo</p>
     </div>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('rect')">Cuadrada / Rect.</button>
-        <button class="tab-btn" onclick="switchTab('round')">Redonda / Circ.</button>
+    <!-- Pestañas de forma -->
+    <div class="shape-tabs">
+        <button class="tab-btn active" onclick="switchTab('rect')">Rectangular</button>
+        <button class="tab-btn" onclick="switchTab('round')">Redonda</button>
     </div>
 
-    <div id="inputs-rect" class="inputs-container">
-        <div class="input-group">
-            <label>Largo (cm)</label>
-            <input type="number" id="largo" class="val-input" value="39" oninput="calcular()">
-        </div>
-        <div class="input-group">
-            <label>Ancho (cm)</label>
-            <input type="number" id="ancho" class="val-input" value="28" oninput="calcular()">
-        </div>
-        <div class="input-group">
-            <label>Alto (cm)</label>
-            <input type="number" id="alto-rect" class="val-input" value="2.5" oninput="calcular()">
-        </div>
-    </div>
-
-    <div id="inputs-round" class="inputs-container" style="display: none;">
-        <div class="input-group">
-            <label>Diámetro (cm)</label>
-            <input type="number" id="diametro" class="val-input" value="20" oninput="calcular()">
-        </div>
-        <div class="input-group">
-            <label>Alto (cm)</label>
-            <input type="number" id="alto-round" class="val-input" value="10" oninput="calcular()">
+    <!-- Panel de dimensiones Rectangular -->
+    <div id="inputs-rect" class="dimensions-panel">
+        <div class="inputs-container">
+            <div class="input-group">
+                <label>Largo (cm)</label>
+                <input type="number" id="largo" class="val-input" value="39" step="0.5" oninput="calcular()">
+            </div>
+            <div class="input-group">
+                <label>Ancho (cm)</label>
+                <input type="number" id="ancho" class="val-input" value="28" step="0.5" oninput="calcular()">
+            </div>
+            <div class="input-group">
+                <label>Alto (cm)</label>
+                <input type="number" id="alto-rect" class="val-input" value="2.5" step="0.1" oninput="calcular()">
+            </div>
         </div>
     </div>
 
-    <div class="summary">
-        <div class="card cost">
-            <span class="label-mini">Costo Producción</span>
-            <span id="resCosto" class="card-val">$ 0.00</span>
-        </div>
-        <div class="card">
-            <span class="label-mini">Masa Total</span>
-            <span id="resMasa" class="card-val">0 g</span>
+    <!-- Panel de dimensiones Redonda (oculto por defecto) -->
+    <div id="inputs-round" class="dimensions-panel" style="display: none;">
+        <div class="inputs-container two-cols">
+            <div class="input-group">
+                <label>Diámetro (cm)</label>
+                <input type="number" id="diametro" class="val-input" value="20" step="0.5" oninput="calcular()">
+            </div>
+            <div class="input-group">
+                <label>Alto (cm)</label>
+                <input type="number" id="alto-round" class="val-input" value="10" step="0.1" oninput="calcular()">
+            </div>
         </div>
     </div>
 
-    <div class="list" id="listaIngredientes"></div>
+    <!-- Panel de resumen -->
+    <div class="summary-panel">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Costo producción</div>
+                <div class="stat-value cost" id="resCosto">$ 0.00</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Masa total</div>
+                <div class="stat-value" id="resMasa">0 g</div>
+            </div>
+        </div>
+    </div>
 
-    <div class="footer">
+    <!-- Lista de ingredientes -->
+    <div class="ingredients-list">
+        <div class="section-title">
+            <i class="fas fa-cake-candles"></i> Ingredientes
+        </div>
+        <div id="listaIngredientes"></div>
+    </div>
+
+    <!-- Botón de acción -->
+    <div class="action-button">
         <button class="btn-copy" onclick="copiarAlPortapapeles()">
-            <i class="fas fa-copy"></i> Copiar al Portapapeles
+            <i class="fas fa-copy"></i> Copiar lista
         </button>
+        <div id="copyMessage" class="copy-message">
+            <i class="fas fa-check-circle"></i> ¡Lista copiada!
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-brand">
+        <span>Gestión profesional de panadería</span>
     </div>
 </div>
 
 <script>
-    // URL DE MI BASE DE DATOS EN GIST
     const WEB_APP_URL = "https://gist.githubusercontent.com/loep1039/0b9fbae05f40bcd16a9a883c5ef0b999/raw/precios.json";
     let currentShape = 'rect';
 
     const RECETA = {
         nombre: "Torta de Naranja",
-        factorHarina: 0.12058, // g de harina por cm3 (calculado de tu tabla 329.2g / (39*28*2.5))
+        factorHarina: 0.12058, // g de harina por cm³ (329.2g / (39*28*2.5))
         items: [
             { nombre: "Harina", pct: 100.0, precioKg: 0 },
             { nombre: "Jugo de Naranja", pct: 39.2, precioKg: 0 },
@@ -247,10 +474,16 @@
 
     function switchTab(shape) {
         currentShape = shape;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
-        document.getElementById('inputs-rect').style.display = shape === 'rect' ? 'grid' : 'none';
-        document.getElementById('inputs-round').style.display = shape === 'round' ? 'grid' : 'none';
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (shape === 'rect') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('inputs-rect').style.display = 'block';
+            document.getElementById('inputs-round').style.display = 'none';
+        } else {
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            document.getElementById('inputs-rect').style.display = 'none';
+            document.getElementById('inputs-round').style.display = 'block';
+        }
         calcular();
     }
 
@@ -260,15 +493,14 @@
             const data = await response.json();
             RECETA.items.forEach(ing => {
                 const encontrado = data.find(p => p.nombre.toLowerCase().trim() === ing.nombre.toLowerCase());
-                if (encontrado) ing.precioKg = encontrado.precioKg;
+                if (encontrado) {
+                    ing.precioKg = encontrado.precioKg;
+                }
             });
-            const statusEl = document.getElementById('status');
-            statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Precios sincronizados';
-            statusEl.style.color = "#7e57c2";
             calcular();
-        } catch (e) { 
-            document.getElementById('status').innerText = "○ Error de conexión: Usando precios base"; 
-            calcular(); 
+        } catch (error) {
+            console.error("Error al cargar precios:", error);
+            calcular();
         }
     }
 
@@ -282,7 +514,7 @@
         } else {
             const d = parseFloat(document.getElementById('diametro').value) || 0;
             const h = parseFloat(document.getElementById('alto-round').value) || 0;
-            volumen = Math.PI * Math.pow(d/2, 2) * h;
+            volumen = Math.PI * Math.pow(d / 2, 2) * h;
         }
 
         const harinaBase = volumen * RECETA.factorHarina;
@@ -293,22 +525,24 @@
 
         RECETA.items.forEach(ing => {
             const gramos = harinaBase * (ing.pct / 100);
-            
-            // --- LÓGICA ESPECIAL PARA HUEVOS CONFIRMADA (Divisor 1500) ---
-            let divisor = (ing.nombre === "Huevos") ? 1500 : 1000;
+            const divisor = (ing.nombre === "Huevos") ? 1500 : 1000;
             const costo = (gramos / divisor) * ing.precioKg;
-            
+
             masaTotal += gramos;
             costoTotal += costo;
 
             contenedor.innerHTML += `
-                <div class="item">
-                    <span class="ing-name">${ing.nombre}</span>
-                    <div class="ing-results">
-                        <span class="ing-qty">${gramos.toFixed(1)} g</span>
-                        <span class="ing-price">$ ${costo.toFixed(2)}</span>
+                <div class="ingredient-item">
+                    <div>
+                        <span class="ingredient-name">${ing.nombre}</span>
+                        <span class="ingredient-percent">(${ing.pct}%)</span>
                     </div>
-                </div>`;
+                    <div class="ingredient-details">
+                        <div class="ingredient-quantity">${gramos.toFixed(1)} g</div>
+                        <div class="ingredient-price">$ ${costo.toFixed(2)}</div>
+                    </div>
+                </div>
+            `;
         });
 
         document.getElementById('resMasa').innerText = `${masaTotal.toFixed(0)} g`;
@@ -316,30 +550,54 @@
     }
 
     function copiarAlPortapapeles() {
-        const masa = document.getElementById('resMasa').innerText;
-        const costo = document.getElementById('resCosto').innerText;
-        let texto = `*TORTA DE NARANJA* - *${costo}*\nMASA TOTAL: ${masa}\n---\n`;
-        
+        const masaTotalStr = document.getElementById('resMasa').innerText;
+        const costoTotalStr = document.getElementById('resCosto').innerText;
+
         let volumen = 0;
         if (currentShape === 'rect') {
-            volumen = (parseFloat(document.getElementById('largo').value)||0)*(parseFloat(document.getElementById('ancho').value)||0)*(parseFloat(document.getElementById('alto-rect').value)||0);
+            const l = parseFloat(document.getElementById('largo').value) || 0;
+            const w = parseFloat(document.getElementById('ancho').value) || 0;
+            const h = parseFloat(document.getElementById('alto-rect').value) || 0;
+            volumen = l * w * h;
         } else {
-            volumen = Math.PI * Math.pow((parseFloat(document.getElementById('diametro').value)||0)/2, 2) * (parseFloat(document.getElementById('alto-round').value)||0);
+            const d = parseFloat(document.getElementById('diametro').value) || 0;
+            const h = parseFloat(document.getElementById('alto-round').value) || 0;
+            volumen = Math.PI * Math.pow(d / 2, 2) * h;
         }
         const harinaBase = volumen * RECETA.factorHarina;
 
+        let textoCopiar = `${RECETA.nombre.toUpperCase()}\n`;
+        textoCopiar += `━━━━━━━━━━━━━━━━\n`;
+        textoCopiar += `Forma: ${currentShape === 'rect' ? 'Rectangular' : 'Redonda'}\n`;
+        textoCopiar += `Costo producción: ${costoTotalStr}\n`;
+        textoCopiar += `Masa total: ${masaTotalStr}\n`;
+        textoCopiar += `━━━━━━━━━━━━━━━━\n`;
+        textoCopiar += `LISTA DE INSUMOS:\n\n`;
+
         RECETA.items.forEach(ing => {
             const gramos = harinaBase * (ing.pct / 100);
-            texto += `${ing.nombre}: ${gramos.toFixed(1)}g\n`;
+            textoCopiar += `${ing.nombre}: ${gramos.toFixed(1)} g\n`;
         });
 
-        const el = document.createElement('textarea');
-        el.value = texto; document.body.appendChild(el); el.select();
-        document.execCommand('copy'); document.body.removeChild(el);
-        alert("Copiado al portapapeles con éxito.");
+        textoCopiar += `\n━━━━━━━━━━━━━━━━\n`;
+        textoCopiar += `Fernando Araujo`;
+
+        navigator.clipboard.writeText(textoCopiar).then(() => {
+            const messageEl = document.getElementById('copyMessage');
+            messageEl.style.display = 'block';
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 2000);
+        });
     }
 
+    document.getElementById('largo')?.addEventListener('input', calcular);
+    document.getElementById('ancho')?.addEventListener('input', calcular);
+    document.getElementById('alto-rect')?.addEventListener('input', calcular);
+    document.getElementById('diametro')?.addEventListener('input', calcular);
+    document.getElementById('alto-round')?.addEventListener('input', calcular);
     window.onload = sincronizarPrecios;
 </script>
+
 </body>
 </html>
